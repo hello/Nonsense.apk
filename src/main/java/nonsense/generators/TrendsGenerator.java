@@ -15,6 +15,7 @@ import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.Random;
 import java.util.function.Function;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import nonsense.model.Condition;
@@ -27,25 +28,39 @@ import nonsense.model.trends.TimeScale;
 import nonsense.model.trends.Trends;
 
 public class TrendsGenerator {
+    private static final Logger LOGGER = Logger.getLogger(TrendsGenerator.class.getSimpleName());
+
     private static final int DAYS_IN_WEEK = 7;
+    private static final int MIN_AGE_SCORES = 3;
+    private static final int MIN_AGE_DURATIONS = 7;
+    private static final int MIN_AGE_DEPTHS = 7;
 
     private final LocalDate today;
     private final Locale locale;
+    private final int accountAgeDays;
     private final Random random = new Random();
 
-    public TrendsGenerator(LocalDate today, Locale locale) {
+    TrendsGenerator(LocalDate today,
+                    Locale locale,
+                    int accountAgeDays) {
         this.today = today;
         this.locale = locale;
+        this.accountAgeDays = accountAgeDays;
     }
 
     public Trends generateTrends(TimeScale timeScale) {
-        final List<TimeScale> availableTimeScales = Lists.newArrayList(TimeScale.LAST_WEEK,
-                                                                       TimeScale.LAST_MONTH,
-                                                                       TimeScale.LAST_3_MONTHS);
+        final List<TimeScale> availableTimeScales = TimeScale.fromAccountAge(accountAgeDays);
         final List<Graph> graphs = new ArrayList<>();
-        graphs.add(generateSleepScoreGraph(timeScale));
-        graphs.add(generateSleepDurationGraphSection(timeScale));
-        graphs.add(generateSleepDepthGraph(timeScale));
+        if (accountAgeDays >= MIN_AGE_SCORES) {
+            graphs.add(generateSleepScoreGraph(timeScale));
+        }
+        if (accountAgeDays >= MIN_AGE_DURATIONS) {
+            graphs.add(generateSleepDurationGraph(timeScale));
+        }
+        if (accountAgeDays >= MIN_AGE_DEPTHS) {
+            graphs.add(generateSleepDepthGraph(timeScale));
+        }
+        LOGGER.info("Generated " + graphs.size() + " graphs, available time scales: " + availableTimeScales);
         return new Trends(availableTimeScales, graphs);
     }
 
@@ -85,7 +100,7 @@ public class TrendsGenerator {
                                    generateAnnotations(DataType.SCORES, Optional.empty()));
     }
 
-    Graph generateSleepDurationGraphSection(TimeScale timeScale) {
+    Graph generateSleepDurationGraph(TimeScale timeScale) {
         final List<GraphSection> sections = new ArrayList<>();
         if (timeScale == TimeScale.LAST_WEEK) {
             final List<String> titles = daysOfWeek();
@@ -177,7 +192,18 @@ public class TrendsGenerator {
     }
 
     List<GraphSection> generateSleepScoreGraphSections(int weekCount) {
-        final List<Double> allValues = generateValues(DataType.SCORES, DAYS_IN_WEEK * weekCount, true);
+        final List<Double> allValues;
+        if (weekCount == 1 && accountAgeDays < DAYS_IN_WEEK) {
+            allValues = generateValues(DataType.SCORES, accountAgeDays, true);
+            final int backFillCount = DAYS_IN_WEEK - accountAgeDays;
+            LOGGER.info("Account age less than 1 week, back filling " + backFillCount + " value(s)");
+            for (int i = 0; i < backFillCount; i++) {
+                allValues.add(0, -1.0);
+            }
+        } else {
+            allValues = generateValues(DataType.SCORES, DAYS_IN_WEEK * weekCount, true);
+        }
+
         final int start = DayOfWeek.from(today).getValue() - 1;
         final int end = DAYS_IN_WEEK - start;
         pad(allValues, start, end);
@@ -206,6 +232,8 @@ public class TrendsGenerator {
     }
 
     List<Double> generateValues(DataType dataType, int count, boolean round) {
+        LOGGER.info("Generating " + count + " values(s) of " + dataType);
+
         final List<Double> values = new ArrayList<>(count);
         for (int i = 0; i < count; i++) {
             final double value = randomValue(dataType.generatedMin,
@@ -234,4 +262,30 @@ public class TrendsGenerator {
     }
 
     //endregion
+
+
+    public static class Builder {
+        private LocalDate today = LocalDate.now().minusDays(1);
+        private Locale locale = Locale.getDefault();
+        private int accountAgeDays = 90;
+
+        public Builder setToday(LocalDate today) {
+            this.today = today;
+            return this;
+        }
+
+        public Builder setLocale(Locale locale) {
+            this.locale = locale;
+            return this;
+        }
+
+        public Builder setAccountAgeDays(int accountAgeDays) {
+            this.accountAgeDays = accountAgeDays;
+            return this;
+        }
+
+        public TrendsGenerator build() {
+            return new TrendsGenerator(today, locale, accountAgeDays);
+        }
+    }
 }

@@ -1,5 +1,8 @@
 package nonsense.model.trends;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import nonsense.model.util.Enums;
 
 public enum TimeScale {
@@ -10,5 +13,17 @@ public enum TimeScale {
 
     public static TimeScale fromString(String string) {
         return Enums.fromString(string, values(), UNKNOWN);
+    }
+
+    public static List<TimeScale> fromAccountAge(int days) {
+        final List<TimeScale> scales = new ArrayList<>(3);
+        if (days >= 3) {
+            scales.add(LAST_WEEK);
+        } else if (days >= 28) {
+            scales.add(LAST_MONTH);
+        } else if (days >= 90) {
+            scales.add(LAST_3_MONTHS);
+        }
+        return scales;
     }
 }
