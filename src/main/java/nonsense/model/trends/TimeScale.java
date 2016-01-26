@@ -19,9 +19,11 @@ public enum TimeScale {
         final List<TimeScale> scales = new ArrayList<>(3);
         if (days >= 3) {
             scales.add(LAST_WEEK);
-        } else if (days >= 28) {
+        }
+        if (days >= 28) {
             scales.add(LAST_MONTH);
-        } else if (days >= 90) {
+        }
+        if (days >= 90) {
             scales.add(LAST_3_MONTHS);
         }
         return scales;
