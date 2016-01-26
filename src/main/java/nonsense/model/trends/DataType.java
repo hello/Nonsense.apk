@@ -5,7 +5,6 @@ import com.google.common.collect.Lists;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 
 import nonsense.model.Condition;
 
@@ -62,20 +61,4 @@ public enum DataType {
         }
     }
 
-    public Function<Double, Condition> createConditionProvider() {
-        final List<ConditionRange> conditionRanges = getConditionRanges();
-        if (conditionRanges.isEmpty()) {
-            return ignored -> Condition.UNKNOWN;
-        } else {
-            return value -> {
-                for (final ConditionRange range : conditionRanges) {
-                    if (value >= range.minValue && value <= range.maxValue) {
-                        return range.condition;
-                    }
-                }
-
-                return Condition.UNKNOWN;
-            };
-        }
-    }
 }
