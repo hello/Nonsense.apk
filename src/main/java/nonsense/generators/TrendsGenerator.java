@@ -154,6 +154,12 @@ public class TrendsGenerator {
             }
         }
 
+        if (sections.size() > 1) {
+            for (int i = 1, length = sections.size(); i < length; i++) {
+                sections.get(i).highlightedValues.clear();
+            }
+        }
+
         return Graph.newSleepDuration(timeScale,
                                       sections,
                                       generateAnnotations(DataType.HOURS));
@@ -209,7 +215,9 @@ public class TrendsGenerator {
 
         final int start = DayOfWeek.from(today).getValue() - 1;
         final int end = DAYS_IN_WEEK - start;
-        nullPadList(allValues, start, end);
+        if (end < DAYS_IN_WEEK) {
+            nullPadList(allValues, start, end);
+        }
 
         final List<GraphSection> sections = new ArrayList<>();
         for (final List<Double> sectionValues : Lists.partition(allValues, DAYS_IN_WEEK)) {
@@ -230,7 +238,7 @@ public class TrendsGenerator {
         final double min = values.stream().min(Double::compare).orElse(0.0);
         final double max = values.stream().max(Double::compare).orElse(0.0);
 
-        final List<Integer> highlightedValues = Lists.newArrayList(values.indexOf(min), values.lastIndexOf(max));
+        final List<Integer> highlightedValues = Lists.newArrayList(values.indexOf(max), values.lastIndexOf(min));
         return new GraphSection(values, titles, highlightedValues, highlightedTitle);
     }
 
