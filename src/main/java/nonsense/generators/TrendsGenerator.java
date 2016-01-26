@@ -1,5 +1,6 @@
 package nonsense.generators;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 
 import java.time.DayOfWeek;
@@ -14,7 +15,6 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.Random;
-import java.util.function.Function;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -67,6 +67,7 @@ public class TrendsGenerator {
 
     //region Generating Graphs
 
+    @VisibleForTesting
     Graph generateSleepScoreGraph(TimeScale timeScale) {
         final List<GraphSection> sections;
         final GraphType graphType;
@@ -83,7 +84,7 @@ public class TrendsGenerator {
                 final LocalDate current = today.minusMonths(i);
                 final int valueCount = current.getMonth().length(current.isLeapYear());
                 final String monthName = current.getMonth().getDisplayName(TextStyle.SHORT, locale);
-                final List<Double> values = generateValues(DataType.SCORES, valueCount, true);
+                final List<Double> values = generateValues(DataType.SCORES, valueCount);
                 sections.add(new GraphSection(values,
                                               Lists.newArrayList(monthName),
                                               Collections.emptyList(),
@@ -97,9 +98,10 @@ public class TrendsGenerator {
         return Graph.newSleepScore(timeScale,
                                    graphType,
                                    sections,
-                                   generateAnnotations(DataType.SCORES, Optional.empty()));
+                                   generateAnnotations(DataType.SCORES));
     }
 
+    @VisibleForTesting
     Graph generateSleepDurationGraph(TimeScale timeScale) {
         final List<GraphSection> sections = new ArrayList<>();
         if (timeScale == TimeScale.LAST_WEEK) {
@@ -154,11 +156,12 @@ public class TrendsGenerator {
 
         return Graph.newSleepDuration(timeScale,
                                       sections,
-                                      generateAnnotations(DataType.HOURS, Optional.empty()));
+                                      generateAnnotations(DataType.HOURS));
     }
 
+    @VisibleForTesting
     Graph generateSleepDepthGraph(TimeScale timeScale) {
-        final List<Double> values = generateValues(DataType.PERCENTS, 3, false);
+        final List<Double> values = generateValues(DataType.PERCENTS, 3);
         final List<GraphSection> sections = Lists.newArrayList(GraphSection.newSleepDepth(values));
         return Graph.newSleepDepth(timeScale, sections);
     }
@@ -168,45 +171,45 @@ public class TrendsGenerator {
 
     //region Generating Values
 
+    @VisibleForTesting
     List<String> daysOfWeek() {
         return Arrays.stream(DayOfWeek.values())
                      .map(day -> day.getDisplayName(TextStyle.SHORT, locale))
                      .collect(Collectors.toList());
     }
 
-    List<Annotation> generateAnnotations(DataType dataType,
-                                         Optional<Function<Double, Condition>> conditionProvider) {
+    @VisibleForTesting
+    List<Annotation> generateAnnotations(DataType dataType) {
         final List<Annotation> annotations = new ArrayList<>();
-        annotations.add(generateAnnotation("Weekdays", dataType, conditionProvider));
-        annotations.add(generateAnnotation("Weekends", dataType, conditionProvider));
-        annotations.add(generateAnnotation("Average", dataType, conditionProvider));
+        annotations.add(generateAnnotation("Weekdays", dataType));
+        annotations.add(generateAnnotation("Weekends", dataType));
+        annotations.add(generateAnnotation("Average", dataType));
         return annotations;
     }
 
-    Annotation generateAnnotation(String title,
-                                  DataType dataType,
-                                  Optional<Function<Double, Condition>> conditionProvider) {
+    @VisibleForTesting
+    Annotation generateAnnotation(String title, DataType dataType) {
         final double value = randomValue(dataType.generatedMin, dataType.generatedMax);
-        final Optional<Condition> condition = conditionProvider.map(f -> f.apply(value));
+        final Optional<Condition> condition = dataType.getConditionForValue(value);
         return new Annotation(title, value, dataType, condition);
     }
 
-    List<GraphSection> generateSleepScoreGraphSections(int weekCount) {
+    private List<GraphSection> generateSleepScoreGraphSections(int weekCount) {
         final List<Double> allValues;
         if (weekCount == 1 && accountAgeDays < DAYS_IN_WEEK) {
-            allValues = generateValues(DataType.SCORES, accountAgeDays, true);
+            allValues = generateValues(DataType.SCORES, accountAgeDays);
             final int backFillCount = DAYS_IN_WEEK - accountAgeDays;
             LOGGER.info("Account age less than 1 week, back filling " + backFillCount + " value(s)");
             for (int i = 0; i < backFillCount; i++) {
                 allValues.add(0, -1.0);
             }
         } else {
-            allValues = generateValues(DataType.SCORES, DAYS_IN_WEEK * weekCount, true);
+            allValues = generateValues(DataType.SCORES, DAYS_IN_WEEK * weekCount);
         }
 
         final int start = DayOfWeek.from(today).getValue() - 1;
         final int end = DAYS_IN_WEEK - start;
-        pad(allValues, start, end);
+        nullPadList(allValues, start, end);
 
         final List<GraphSection> sections = new ArrayList<>();
         for (final List<Double> sectionValues : Lists.partition(allValues, DAYS_IN_WEEK)) {
@@ -222,8 +225,8 @@ public class TrendsGenerator {
         return sections;
     }
 
-    GraphSection generateSleepDurationGraphSection(int count, List<String> titles, OptionalInt highlightedTitle) {
-        final List<Double> values = generateValues(DataType.HOURS, count, true);
+    private GraphSection generateSleepDurationGraphSection(int count, List<String> titles, OptionalInt highlightedTitle) {
+        final List<Double> values = generateValues(DataType.HOURS, count);
         final double min = values.stream().min(Double::compare).orElse(0.0);
         final double max = values.stream().max(Double::compare).orElse(0.0);
 
@@ -231,14 +234,15 @@ public class TrendsGenerator {
         return new GraphSection(values, titles, highlightedValues, highlightedTitle);
     }
 
-    List<Double> generateValues(DataType dataType, int count, boolean round) {
+    @VisibleForTesting
+    List<Double> generateValues(DataType dataType, int count) {
         LOGGER.info("Generating " + count + " values(s) of " + dataType);
 
         final List<Double> values = new ArrayList<>(count);
         for (int i = 0; i < count; i++) {
             final double value = randomValue(dataType.generatedMin,
                                              dataType.generatedMax);
-            if (round) {
+            if (dataType.roundValues) {
                 values.add(Math.floor(value));
             } else {
                 values.add(value);
@@ -247,7 +251,8 @@ public class TrendsGenerator {
         return values;
     }
 
-    void pad(List<Double> values, int startCount, int endCount) {
+    @VisibleForTesting
+    static void nullPadList(List<Double> values, int startCount, int endCount) {
         for (int i = 0; i < startCount; i++) {
             values.add(0, null);
         }
@@ -257,6 +262,7 @@ public class TrendsGenerator {
         }
     }
 
+    @VisibleForTesting
     double randomValue(double min, double max) {
         return min + (random.nextDouble() * (max - min));
     }
