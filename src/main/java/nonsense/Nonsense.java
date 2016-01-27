@@ -9,6 +9,8 @@ import java.util.Locale;
 import java.util.logging.Logger;
 
 import nonsense.generators.TrendsGenerator;
+import nonsense.model.Types;
+import nonsense.model.oauth.AccessToken;
 import nonsense.model.trends.TimeScale;
 import nonsense.response.JacksonTransformer;
 import spark.Request;
@@ -17,6 +19,7 @@ import spark.ResponseTransformer;
 
 import static spark.Spark.get;
 import static spark.Spark.port;
+import static spark.Spark.post;
 
 public class Nonsense {
     private static final Logger LOGGER = Logger.getLogger(Nonsense.class.getSimpleName());
@@ -34,12 +37,19 @@ public class Nonsense {
     public static void main(String[] args) {
         final ResponseTransformer transformer = createResponseTransformer();
         port(3000);
-        get("/", JacksonTransformer.CONTENT_TYPE, Nonsense::index, transformer);
-        get("/v2/trends/:time-scale", JacksonTransformer.CONTENT_TYPE, Nonsense::trends, transformer);
+        get("/", Nonsense::index, transformer);
+        post("/v1/oauth2/token", Types.FORM_DATA, Nonsense::token, transformer);
+        get("/v2/trends/:time-scale", Nonsense::trends, transformer);
     }
 
     public static Object index(Request request, Response response) {
+        response.type(Types.JSON);
         return Collections.emptyMap();
+    }
+
+    public static Object token(Request request, Response response) {
+        response.type(Types.JSON);
+        return AccessToken.generate();
     }
 
     public static Object trends(Request request, Response response) {
@@ -66,6 +76,7 @@ public class Nonsense {
             generatorBuilder.setLocale(locale);
         }
 
+        response.type(Types.JSON);
         return generatorBuilder.build()
                                .generateTrends(timeScale);
     }
