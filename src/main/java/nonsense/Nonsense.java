@@ -14,6 +14,7 @@ import nonsense.model.Types;
 import nonsense.model.account.Account;
 import nonsense.model.oauth.AccessToken;
 import nonsense.model.trends.TimeScale;
+import nonsense.model.trends.Trends;
 import nonsense.response.JacksonTransformer;
 import spark.Request;
 import spark.Response;
@@ -51,17 +52,17 @@ public class Nonsense {
         return Collections.emptyMap();
     }
 
-    public static Object token(Request request, Response response) {
+    public static AccessToken token(Request request, Response response) {
         response.type(Types.JSON);
-        return AccessToken.generate();
+        return AccessToken.createFake();
     }
 
-    public static Object account(Request request, Response response) {
+    public static Account account(Request request, Response response) {
         response.type(Types.JSON);
         return Account.createFake();
     }
 
-    public static Object trends(Request request, Response response) {
+    public static Trends trends(Request request, Response response) {
         final TimeScale timeScale = TimeScale.fromString(request.params("time-scale"));
         LOGGER.info("GET /v2/trends/" + timeScale);
 

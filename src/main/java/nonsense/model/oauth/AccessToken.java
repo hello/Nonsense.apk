@@ -37,7 +37,7 @@ public class AccessToken {
         this.accountId = accountId;
     }
 
-    public static AccessToken generate() {
+    public static AccessToken createFake() {
         return new AccessToken(UUID.randomUUID().toString(),
                                Long.MAX_VALUE,
                                UUID.randomUUID().toString(),
