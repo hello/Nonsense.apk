@@ -14,52 +14,73 @@ public class Account {
     public static final String FAKE_ID = "not-a-real-account";
 
     @JsonProperty("id")
-    private String id;
+    public final String id;
 
     @JsonProperty("email")
-    private String email;
+    public final String email;
 
     @JsonProperty("tz")
-    private int timeZoneOffset;
+    public final int timeZoneOffset;
 
     @JsonProperty("name")
-    private String name;
+    public final String name;
 
     @JsonProperty("gender")
-    private Gender gender;
+    public final Gender gender;
 
     @JsonProperty("height")
-    private Integer height;
+    public final Integer height;
 
     @JsonProperty("weight")
-    private Integer weight;
+    public final Integer weight;
 
     @JsonProperty("dob")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private LocalDate birthDate;
+    public final LocalDate birthDate;
 
     @JsonProperty("created")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
-    private ZonedDateTime created;
+    public final ZonedDateTime created;
 
     @JsonProperty("last_modified")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
-    private ZonedDateTime lastModified;
+    public final ZonedDateTime lastModified;
 
+
+    public Account(@JsonProperty("id") String id,
+                   @JsonProperty("email") String email,
+                   @JsonProperty("tz") int timeZoneOffset,
+                   @JsonProperty("name") String name,
+                   @JsonProperty("gender") Gender gender,
+                   @JsonProperty("height") Integer height,
+                   @JsonProperty("weight") Integer weight,
+                   @JsonProperty("dob")LocalDate birthDate,
+                   @JsonProperty("created") ZonedDateTime created,
+                   @JsonProperty("last_modified") ZonedDateTime lastModified) {
+        this.id = id;
+        this.email = email;
+        this.timeZoneOffset = timeZoneOffset;
+        this.name = name;
+        this.gender = gender;
+        this.height = height;
+        this.weight = weight;
+        this.birthDate = birthDate;
+        this.created = created;
+        this.lastModified = lastModified;
+    }
+    
 
     public static Account createFake() {
-        final Account account = new Account();
-        account.id = FAKE_ID;
-        account.email = "fake@sayhello.com";
-        account.timeZoneOffset = TimeZone.getDefault().getOffset(System.currentTimeMillis());
-        account.name = "Sam Samson";
-        account.created = ZonedDateTime.of(2015, 2, 14, 0, 30, 0, 0, ZoneId.of("UTC")); // First day of real data
-        account.gender = Enums.random(Gender.values());
-        account.height = 177;
-        account.weight = 68039;
-        account.birthDate = LocalDate.of(1990, 4, 1);
-        account.lastModified = ZonedDateTime.now();
-        return account;
+        return new Account(FAKE_ID,
+                           "fake@sayhello.com",
+                           TimeZone.getDefault().getOffset(System.currentTimeMillis()),
+                           "Sam Samson",
+                           Enums.random(Gender.values()),
+                           177,
+                           68039,
+                           LocalDate.of(1990, 4, 1),
+                           ZonedDateTime.of(2015, 2, 14, 0, 30, 0, 0, ZoneId.of("UTC")), // First day of real data
+                           ZonedDateTime.now());
     }
 
 
