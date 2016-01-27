@@ -4,7 +4,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.UUID;
 
+import nonsense.model.account.Account;
+
 public class AccessToken {
+    public static final String TYPE_TOKEN = "token";
+
     @JsonProperty("access_token")
     public final String accessToken;
 
@@ -37,8 +41,8 @@ public class AccessToken {
         return new AccessToken(UUID.randomUUID().toString(),
                                Long.MAX_VALUE,
                                UUID.randomUUID().toString(),
-                               "token",
-                               "not-a-real-account");
+                               TYPE_TOKEN,
+                               Account.FAKE_ID);
     }
 
 

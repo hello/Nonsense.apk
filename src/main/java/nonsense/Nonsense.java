@@ -2,6 +2,7 @@ package nonsense;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import java.time.LocalDate;
 import java.util.Collections;
@@ -10,6 +11,7 @@ import java.util.logging.Logger;
 
 import nonsense.generators.TrendsGenerator;
 import nonsense.model.Types;
+import nonsense.model.account.Account;
 import nonsense.model.oauth.AccessToken;
 import nonsense.model.trends.TimeScale;
 import nonsense.response.JacksonTransformer;
@@ -27,6 +29,7 @@ public class Nonsense {
     private static ObjectMapper createObjectMapper() {
         final ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new Jdk8Module());
+        objectMapper.registerModule(new JavaTimeModule());
         return objectMapper;
     }
 
@@ -39,6 +42,7 @@ public class Nonsense {
         port(3000);
         get("/", Nonsense::index, transformer);
         post("/v1/oauth2/token", Types.FORM_DATA, Nonsense::token, transformer);
+        get("/v1/account", Nonsense::account, transformer);
         get("/v2/trends/:time-scale", Nonsense::trends, transformer);
     }
 
@@ -50,6 +54,11 @@ public class Nonsense {
     public static Object token(Request request, Response response) {
         response.type(Types.JSON);
         return AccessToken.generate();
+    }
+
+    public static Object account(Request request, Response response) {
+        response.type(Types.JSON);
+        return Account.createFake();
     }
 
     public static Object trends(Request request, Response response) {
