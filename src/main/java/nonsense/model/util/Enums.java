@@ -1,5 +1,7 @@
 package nonsense.model.util;
 
+import java.util.Random;
+
 public class Enums {
     public static <T extends Enum> T fromString(String string, T[] values, T defaultValue) {
         for (final T value : values) {
@@ -8,5 +10,10 @@ public class Enums {
             }
         }
         return defaultValue;
+    }
+
+    public static <T extends Enum> T random(T[] values) {
+        final int position = new Random().nextInt(values.length);
+        return values[position];
     }
 }

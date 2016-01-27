@@ -8,6 +8,8 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.TimeZone;
 
+import nonsense.model.util.Enums;
+
 public class Account {
     public static final String FAKE_ID = "not-a-real-account";
 
@@ -50,9 +52,9 @@ public class Account {
         account.id = FAKE_ID;
         account.email = "fake@sayhello.com";
         account.timeZoneOffset = TimeZone.getDefault().getOffset(System.currentTimeMillis());
-        account.name = "Notareal Boy";
+        account.name = "Sam Samson";
         account.created = ZonedDateTime.of(2015, 2, 14, 0, 30, 0, 0, ZoneId.of("UTC")); // First day of real data
-        account.gender = Gender.MALE;
+        account.gender = Enums.random(Gender.values());
         account.height = 177;
         account.weight = 68039;
         account.birthDate = LocalDate.of(1990, 4, 1);
