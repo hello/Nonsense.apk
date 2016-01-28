@@ -9,9 +9,7 @@ import java.util.Optional;
 import nonsense.model.Condition;
 
 public enum DataType {
-    SCORES(40, 100,
-           0, 100,
-           true) {
+    SCORES(40, 100, true) {
         @Override
         public List<ConditionRange> getConditionRanges() {
             return Lists.newArrayList(new ConditionRange(0, 59, Condition.ALERT),
@@ -19,26 +17,16 @@ public enum DataType {
                                       new ConditionRange(80, 100, Condition.IDEAL));
         }
     },
-    HOURS(4, 12,
-          0, 24,
-          true),
-    PERCENTS(0.0, 1.0,
-             0.0, 1.0,
-             false);
+    HOURS(4, 12, true),
+    PERCENTS(0.0, 1.0, false);
 
     public final double generatedMin;
     public final double generatedMax;
-    public final double actualMin;
-    public final double actualMax;
     public final boolean roundValues;
 
-    DataType(double generatedMin, double generatedMax,
-             double actualMin, double actualMax,
-             boolean roundValues) {
+    DataType(double generatedMin, double generatedMax, boolean roundValues) {
         this.generatedMin = generatedMin;
         this.generatedMax = generatedMax;
-        this.actualMin = actualMin;
-        this.actualMax = actualMax;
         this.roundValues = roundValues;
     }
 

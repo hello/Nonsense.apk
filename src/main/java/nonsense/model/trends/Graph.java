@@ -37,14 +37,16 @@ public class Graph {
                  String title,
                  DataType dataType,
                  GraphType graphType,
+                 double minValue,
+                 double maxValue,
                  List<GraphSection> sections,
                  List<Annotation> annotations) {
         this.timeScale = timeScale;
         this.title = title;
         this.dataType = dataType;
         this.graphType = graphType;
-        this.minValue = dataType.actualMin;
-        this.maxValue = dataType.actualMax;
+        this.minValue = minValue;
+        this.maxValue = maxValue;
         this.sections = sections;
         this.conditionRanges = dataType.getConditionRanges();
         this.annotations = annotations;
@@ -58,6 +60,7 @@ public class Graph {
                          "Sleep Score",
                          DataType.SCORES,
                          graphType,
+                         0, 100,
                          sections,
                          annotations);
     }
@@ -65,10 +68,20 @@ public class Graph {
     public static Graph newSleepDuration(TimeScale timeScale,
                                          List<GraphSection> sections,
                                          List<Annotation> annotations) {
+        final double min = sections.parallelStream()
+                                   .flatMap(s -> s.values.stream())
+                                   .min(Double::compare)
+                                   .orElse(0.0);
+        final double max = sections.parallelStream()
+                                   .flatMap(s -> s.values.stream())
+                                   .max(Double::compare)
+                                   .orElse(0.0);
+
         return new Graph(timeScale,
                          "Sleep Duration",
                          DataType.HOURS,
                          GraphType.BAR,
+                         min, max,
                          sections,
                          annotations);
     }
@@ -79,6 +92,7 @@ public class Graph {
                          "Sleep Depth",
                          DataType.PERCENTS,
                          GraphType.BUBBLES,
+                         0.0, 1.0,
                          sections,
                          Collections.emptyList());
     }
