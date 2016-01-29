@@ -1,4 +1,4 @@
-package nonsense.generators;
+package nonsense.providers;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
@@ -27,8 +27,8 @@ import nonsense.model.trends.GraphType;
 import nonsense.model.trends.TimeScale;
 import nonsense.model.trends.Trends;
 
-public class TrendsGenerator {
-    private static final Logger LOGGER = Logger.getLogger(TrendsGenerator.class.getSimpleName());
+public class TrendsProvider {
+    private static final Logger LOGGER = Logger.getLogger(TrendsProvider.class.getSimpleName());
 
     private static final int DAYS_IN_WEEK = 7;
     private static final int MIN_AGE_SCORES = 3;
@@ -40,15 +40,15 @@ public class TrendsGenerator {
     private final int accountAgeDays;
     private final Random random = new Random();
 
-    TrendsGenerator(LocalDate today,
-                    Locale locale,
-                    int accountAgeDays) {
+    TrendsProvider(LocalDate today,
+                   Locale locale,
+                   int accountAgeDays) {
         this.today = today;
         this.locale = locale;
         this.accountAgeDays = accountAgeDays;
     }
 
-    public Trends generateTrends(TimeScale timeScale) {
+    public Trends getTrendsForTimeScale(TimeScale timeScale) {
         final List<TimeScale> availableTimeScales = TimeScale.fromAccountAge(accountAgeDays);
         final List<Graph> graphs = new ArrayList<>();
         if (accountAgeDays >= MIN_AGE_SCORES) {
@@ -298,8 +298,8 @@ public class TrendsGenerator {
             return this;
         }
 
-        public TrendsGenerator build() {
-            return new TrendsGenerator(today, locale, accountAgeDays);
+        public TrendsProvider build() {
+            return new TrendsProvider(today, locale, accountAgeDays);
         }
     }
 }

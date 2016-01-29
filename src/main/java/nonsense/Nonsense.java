@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.Locale;
 import java.util.logging.Logger;
 
-import nonsense.generators.TrendsGenerator;
+import nonsense.providers.TrendsProvider;
 import nonsense.model.Types;
 import nonsense.model.account.Account;
 import nonsense.model.oauth.AccessToken;
@@ -66,28 +66,27 @@ public class Nonsense {
         final TimeScale timeScale = TimeScale.fromString(request.params("time-scale"));
         LOGGER.info("GET /v2/trends/" + timeScale);
 
-        final TrendsGenerator.Builder generatorBuilder = new TrendsGenerator.Builder();
+        final TrendsProvider.Builder builder = new TrendsProvider.Builder();
 
         if (request.queryParams().contains("ns_today")) {
             final String todayRaw = request.queryParams("ns_today");
             final LocalDate today = LocalDate.parse(todayRaw);
-            generatorBuilder.setToday(today);
+            builder.setToday(today);
         }
 
         if (request.queryParams().contains("ns_account_age")) {
             final String accountAgeRaw = request.queryParams("ns_account_age");
             final int accountAge = Integer.valueOf(accountAgeRaw, 10);
-            generatorBuilder.setAccountAgeDays(accountAge);
+            builder.setAccountAgeDays(accountAge);
         }
 
         if (request.queryParams().contains("ns_locale")) {
             final String localeRaw = request.queryParams("ns_locale");
             final Locale locale = Locale.forLanguageTag(localeRaw);
-            generatorBuilder.setLocale(locale);
+            builder.setLocale(locale);
         }
 
         response.type(Types.JSON);
-        return generatorBuilder.build()
-                               .generateTrends(timeScale);
+        return builder.build().getTrendsForTimeScale(timeScale);
     }
 }

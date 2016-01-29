@@ -1,4 +1,4 @@
-package nonsense.generators;
+package nonsense.providers;
 
 import com.google.common.collect.Lists;
 
@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import nonsense.model.trends.Annotation;
 import nonsense.model.trends.DataType;
@@ -24,14 +23,13 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
-public class TrendsGeneratorTests {
-    private TrendsGenerator generator;
+public class TrendsProviderTests {
+    private TrendsProvider provider;
 
     @Before
     public void setUp() {
-        this.generator = new TrendsGenerator.Builder()
+        this.provider = new TrendsProvider.Builder()
                 .setLocale(Locale.US)
                 .setToday(LocalDate.of(2016, 1, 25))
                 .build();
@@ -39,32 +37,32 @@ public class TrendsGeneratorTests {
 
     @Test
     public void generateSleepScoreGraph() {
-        final Graph lastWeek = generator.generateSleepScoreGraph(TimeScale.LAST_WEEK);
+        final Graph lastWeek = provider.generateSleepScoreGraph(TimeScale.LAST_WEEK);
         assertThat(lastWeek.graphType, is(equalTo(GraphType.GRID)));
         assertThat(lastWeek.sections.size(), is(equalTo(1)));
 
-        final Graph lastMonth = generator.generateSleepScoreGraph(TimeScale.LAST_MONTH);
+        final Graph lastMonth = provider.generateSleepScoreGraph(TimeScale.LAST_MONTH);
         assertThat(lastMonth.graphType, is(equalTo(GraphType.GRID)));
         assertThat(lastMonth.sections.size(), is(equalTo(5)));
 
-        final Graph last3Months = generator.generateSleepScoreGraph(TimeScale.LAST_3_MONTHS);
+        final Graph last3Months = provider.generateSleepScoreGraph(TimeScale.LAST_3_MONTHS);
         assertThat(last3Months.graphType, is(equalTo(GraphType.OVERVIEW)));
         assertThat(last3Months.sections.size(), is(equalTo(3)));
     }
 
     @Test
     public void generateSleepDurationGraph() {
-        final Graph lastWeek = generator.generateSleepDurationGraph(TimeScale.LAST_WEEK);
+        final Graph lastWeek = provider.generateSleepDurationGraph(TimeScale.LAST_WEEK);
         assertThat(lastWeek.graphType, is(equalTo(GraphType.BAR)));
         assertThat(lastWeek.sections.size(), is(equalTo(1)));
         assertThat(getHighlightedValueCount(lastWeek.sections), is(equalTo(2)));
 
-        final Graph lastMonth = generator.generateSleepDurationGraph(TimeScale.LAST_MONTH);
+        final Graph lastMonth = provider.generateSleepDurationGraph(TimeScale.LAST_MONTH);
         assertThat(lastMonth.graphType, is(equalTo(GraphType.BAR)));
         assertThat(lastMonth.sections.size(), is(equalTo(2)));
         assertThat(getHighlightedValueCount(lastMonth.sections), is(equalTo(2)));
 
-        final Graph last3Months = generator.generateSleepDurationGraph(TimeScale.LAST_3_MONTHS);
+        final Graph last3Months = provider.generateSleepDurationGraph(TimeScale.LAST_3_MONTHS);
         assertThat(last3Months.graphType, is(equalTo(GraphType.BAR)));
         assertThat(last3Months.sections.size(), is(equalTo(3)));
         assertThat(getHighlightedValueCount(last3Months.sections), is(equalTo(2)));
@@ -72,7 +70,7 @@ public class TrendsGeneratorTests {
 
     @Test
     public void generateSleepDepthGraph() {
-        final Graph graph = generator.generateSleepDepthGraph(TimeScale.LAST_WEEK);
+        final Graph graph = provider.generateSleepDepthGraph(TimeScale.LAST_WEEK);
         assertThat(graph.sections.size(), is(equalTo(1)));
         assertThat(graph.sections.get(0).values.size(), is(equalTo(3)));
         assertThat(graph.minValue, is(equalTo(0.0)));
@@ -83,7 +81,7 @@ public class TrendsGeneratorTests {
 
     @Test
     public void daysOfWeek() {
-        final List<String> weekdayNames = generator.daysOfWeek();
+        final List<String> weekdayNames = provider.daysOfWeek();
         assertThat(weekdayNames.size(), is(equalTo(7)));
         assertThat(weekdayNames, hasItem("Mon"));
         assertThat(weekdayNames, hasItem("Tue"));
@@ -96,7 +94,7 @@ public class TrendsGeneratorTests {
 
     @Test
     public void generateAnnotations() {
-        final List<Annotation> annotations = generator.generateAnnotations(DataType.SCORES);
+        final List<Annotation> annotations = provider.generateAnnotations(DataType.SCORES);
         assertThat(annotations.size(), is(equalTo(3)));
 
         final Set<String> titles = annotations.parallelStream()
@@ -110,7 +108,7 @@ public class TrendsGeneratorTests {
     @Test
     public void generateAnnotation() {
         for (final DataType dataType : DataType.values()) {
-            final Annotation annotation = generator.generateAnnotation("Fake", dataType);
+            final Annotation annotation = provider.generateAnnotation("Fake", dataType);
             assertThat(annotation.title, is(equalTo("Fake")));
             assertThat(annotation.value >= dataType.generatedMin, is(true));
             assertThat(annotation.value <= dataType.generatedMax, is(true));
@@ -121,7 +119,7 @@ public class TrendsGeneratorTests {
     @Test
     public void generateValues() {
         for (final DataType dataType : DataType.values()) {
-            final List<Double> values = generator.generateValues(dataType, 10);
+            final List<Double> values = provider.generateValues(dataType, 10);
             assertThat(values.size(), is(equalTo(10)));
             for (final double value : values) {
                 assertThat(value >= dataType.generatedMin, is(true));
@@ -135,13 +133,13 @@ public class TrendsGeneratorTests {
         final List<Double> values = new ArrayList<>();
         values.add(42.0);
 
-        TrendsGenerator.nullPadList(values, 5, 0);
+        TrendsProvider.nullPadList(values, 5, 0);
         assertThat(values.size(), is(equalTo(6)));
 
-        TrendsGenerator.nullPadList(values, 0, 5);
+        TrendsProvider.nullPadList(values, 0, 5);
         assertThat(values.size(), is(equalTo(11)));
 
-        TrendsGenerator.nullPadList(values, 1, 1);
+        TrendsProvider.nullPadList(values, 1, 1);
         assertThat(values.size(), is(equalTo(13)));
 
         assertThat(values, is(equalTo(Lists.newArrayList(null, null, null, null, null, null,
@@ -152,7 +150,7 @@ public class TrendsGeneratorTests {
     @Test
     public void randomValue() {
         for (int i = 0; i < 1000; i++) {
-            final double value = generator.randomValue(-10, 10);
+            final double value = provider.randomValue(-10, 10);
             assertThat(value > -10.0, is(true));
             assertThat(value < 10.0, is(true));
         }
