@@ -26,6 +26,7 @@ import nonsense.model.trends.GraphSection;
 import nonsense.model.trends.GraphType;
 import nonsense.model.trends.TimeScale;
 import nonsense.model.trends.Trends;
+import nonsense.util.RandomHelper;
 
 public class RandomTrendsProvider implements TrendsProvider {
     private static final Logger LOGGER = Logger.getLogger(RandomTrendsProvider.class.getSimpleName());
@@ -196,7 +197,7 @@ public class RandomTrendsProvider implements TrendsProvider {
 
     @VisibleForTesting
     Annotation generateAnnotation(String title, DataType dataType) {
-        final double value = randomValue(dataType.generatedMin, dataType.generatedMax);
+        final double value = RandomHelper.doubleInRange(random, dataType.generatedMin, dataType.generatedMax);
         final Optional<Condition> condition = dataType.getConditionForValue(value);
         return new Annotation(title, value, dataType, condition);
     }
@@ -249,8 +250,8 @@ public class RandomTrendsProvider implements TrendsProvider {
 
         final List<Double> values = new ArrayList<>(count);
         for (int i = 0; i < count; i++) {
-            final double value = randomValue(dataType.generatedMin,
-                                             dataType.generatedMax);
+            final double value = RandomHelper.doubleInRange(random, dataType.generatedMin,
+                                                            dataType.generatedMax);
             if (dataType.roundValues) {
                 values.add(Math.floor(value));
             } else {
@@ -269,11 +270,6 @@ public class RandomTrendsProvider implements TrendsProvider {
         for (int i = 0; i < endCount; i++) {
             values.add(null);
         }
-    }
-
-    @VisibleForTesting
-    double randomValue(double min, double max) {
-        return min + (random.nextDouble() * (max - min));
     }
 
     //endregion

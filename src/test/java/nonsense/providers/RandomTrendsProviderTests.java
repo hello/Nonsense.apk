@@ -147,15 +147,6 @@ public class RandomTrendsProviderTests {
                                                          null, null, null, null, null, null))));
     }
 
-    @Test
-    public void randomValue() {
-        for (int i = 0; i < 1000; i++) {
-            final double value = provider.randomValue(-10, 10);
-            assertThat(value > -10.0, is(true));
-            assertThat(value < 10.0, is(true));
-        }
-    }
-
 
     private static int getHighlightedValueCount(List<GraphSection> sections) {
         return sections.stream()
