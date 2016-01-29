@@ -9,7 +9,7 @@ import java.time.ZonedDateTime;
 import java.util.TimeZone;
 
 import nonsense.model.Formats;
-import nonsense.model.util.Enums;
+import nonsense.util.Enums;
 
 public class Account {
     public static final String FAKE_ID = "not-a-real-account";

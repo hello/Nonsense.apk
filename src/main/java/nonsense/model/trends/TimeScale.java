@@ -3,7 +3,7 @@ package nonsense.model.trends;
 import java.util.ArrayList;
 import java.util.List;
 
-import nonsense.model.util.Enums;
+import nonsense.util.Enums;
 
 public enum TimeScale {
     LAST_WEEK,

@@ -2,7 +2,7 @@ package nonsense.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 
-import nonsense.model.util.Enums;
+import nonsense.util.Enums;
 
 public enum Condition {
     ALERT,

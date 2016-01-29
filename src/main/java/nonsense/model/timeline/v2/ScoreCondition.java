@@ -2,7 +2,7 @@ package nonsense.model.timeline.v2;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 
-import nonsense.model.util.Enums;
+import nonsense.util.Enums;
 
 public enum ScoreCondition {
     UNAVAILABLE,

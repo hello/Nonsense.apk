@@ -1,8 +1,10 @@
 package nonsense.model.timeline.v1;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import nonsense.model.Condition;
+import nonsense.util.Enums;
 
 public class TimelineV1Insight {
     @JsonProperty("condition")
@@ -37,5 +39,16 @@ public class TimelineV1Insight {
         PARTICULATES,
         SOUND,
         TEMPERATURE,
+        UNKNOWN;
+
+        @Override
+        public String toString() {
+            return super.toString().toLowerCase();
+        }
+
+        @JsonCreator
+        public static Sensor fromString(String string) {
+            return Enums.fromString(string, values(), UNKNOWN);
+        }
     }
 }

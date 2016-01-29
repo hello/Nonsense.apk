@@ -1,6 +1,8 @@
-package nonsense.model.util;
+package nonsense.util;
 
 import org.junit.Test;
+
+import nonsense.util.Enums;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.hasItem;

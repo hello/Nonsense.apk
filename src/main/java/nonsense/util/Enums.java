@@ -1,4 +1,4 @@
-package nonsense.model.util;
+package nonsense.util;
 
 import java.util.Random;
 
@@ -12,7 +12,8 @@ public class Enums {
         return defaultValue;
     }
 
-    public static <T extends Enum> T random(T[] values) {
+    @SafeVarargs
+    public static <T extends Enum> T random(T... values) {
         final int position = new Random().nextInt(values.length);
         return values[position];
     }

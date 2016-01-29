@@ -8,8 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import nonsense.model.timeline.v2.TimelineV2Event;
-import nonsense.model.util.Enums;
+import nonsense.util.Enums;
 
 public class TimelineV1Segment {
     @JsonProperty("duration")
@@ -70,22 +69,28 @@ public class TimelineV1Segment {
     }
 
     public enum Type {
-        NONE,
-        ALARM,
-        IN_BED,
-        LIGHT,
-        LIGHTS_OUT,
-        MOTION,
-        NOISE,
-        OUT_OF_BED,
-        PARTNER_MOTION,
-        SLEEP,
-        SUNRISE,
-        SUNSET,
-        WAKE_UP,
-        SLEEPING,
-        SNORING,
-        SLEEP_TALK;
+        NONE(""),
+        ALARM("Your alarm rang"),
+        IN_BED("You got into bed"),
+        LIGHT("There was a bright light"),
+        LIGHTS_OUT("The lights went out"),
+        MOTION("There was a lot of movement"),
+        NOISE("There was a loud sound"),
+        OUT_OF_BED("You got out of bed"),
+        PARTNER_MOTION("Your partner was moving a lot"),
+        SLEEP("You were sleeping"),
+        SUNRISE("The sun rose"),
+        SUNSET("The sun set"),
+        WAKE_UP("You woke up"),
+        SLEEPING("You were in bed"),
+        SNORING("Someone was snoring"),
+        SLEEP_TALK("Someone was sleep talking");
+
+        public final String message;
+
+        Type(String message) {
+            this.message = message;
+        }
 
         @JsonCreator
         public static Type fromString(String string) {

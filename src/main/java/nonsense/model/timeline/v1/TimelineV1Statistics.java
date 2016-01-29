@@ -17,6 +17,13 @@ public class TimelineV1Statistics {
     @JsonProperty("total_sleep")
     public final OptionalLong totalSleep;
 
+    public static TimelineV1Statistics empty() {
+        return new TimelineV1Statistics(OptionalLong.empty(),
+                                        OptionalLong.empty(),
+                                        OptionalLong.empty(),
+                                        OptionalLong.empty());
+    }
+
     public TimelineV1Statistics(@JsonProperty("sound_sleep") OptionalLong soundSleep,
                                 @JsonProperty("time_to_sleep") OptionalLong timeToSleep,
                                 @JsonProperty("times_awake") OptionalLong timesAwake,
