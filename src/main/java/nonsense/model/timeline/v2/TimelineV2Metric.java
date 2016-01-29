@@ -6,7 +6,7 @@ import java.util.OptionalLong;
 
 import nonsense.model.Condition;
 
-public class TimelineMetric {
+public class TimelineV2Metric {
     private static final long VALUE_MISSING = Long.MIN_VALUE;
 
     @JsonProperty("name")
@@ -22,10 +22,10 @@ public class TimelineMetric {
     public final Condition condition;
 
 
-    public TimelineMetric(Name name,
-                          OptionalLong value,
-                          Unit unit,
-                          Condition condition) {
+    public TimelineV2Metric(Name name,
+                            OptionalLong value,
+                            Unit unit,
+                            Condition condition) {
         this.name = name;
         this.value = value;
         this.unit = unit;

@@ -10,7 +10,7 @@ import java.util.Optional;
 
 import nonsense.model.Formats;
 
-public class TimelineEvent {
+public class TimelineV2Event {
     @JsonProperty("timestamp")
     @JsonFormat(shape = JsonFormat.Shape.NUMBER)
     public final LocalDate timestamp;
@@ -36,14 +36,14 @@ public class TimelineEvent {
     @JsonProperty("valid_actions")
     public final List<Action> validActions;
 
-    public TimelineEvent(LocalDate timestamp,
-                         int timezoneOffset,
-                         long durationMillis,
-                         Optional<String> message,
-                         int sleepDepth,
-                         SleepState sleepState,
-                         Type type,
-                         List<Action> validActions) {
+    public TimelineV2Event(LocalDate timestamp,
+                           int timezoneOffset,
+                           long durationMillis,
+                           Optional<String> message,
+                           int sleepDepth,
+                           SleepState sleepState,
+                           Type type,
+                           List<Action> validActions) {
         this.timestamp = timestamp;
         this.timezoneOffset = timezoneOffset;
         this.durationMillis = durationMillis;

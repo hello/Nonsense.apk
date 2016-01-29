@@ -24,17 +24,17 @@ public class TimelineV2 {
     public final LocalDate date;
 
     @JsonProperty("events")
-    public final List<TimelineEvent> events;
+    public final List<TimelineV2Event> events;
 
     @JsonProperty("metrics")
-    public final List<TimelineMetric> metrics;
+    public final List<TimelineV2Metric> metrics;
 
     public TimelineV2(OptionalInt score,
                       ScoreCondition scoreCondition,
                       String message,
                       LocalDate date,
-                      List<TimelineEvent> events,
-                      List<TimelineMetric> metrics) {
+                      List<TimelineV2Event> events,
+                      List<TimelineV2Metric> metrics) {
         this.score = score;
         this.scoreCondition = scoreCondition;
         this.message = message;
