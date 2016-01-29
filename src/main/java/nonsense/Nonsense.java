@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.Locale;
 import java.util.logging.Logger;
 
-import nonsense.providers.TrendsProvider;
+import nonsense.providers.RandomTrendsProvider;
 import nonsense.model.Types;
 import nonsense.model.account.Account;
 import nonsense.model.oauth.AccessToken;
@@ -66,7 +66,7 @@ public class Nonsense {
         final TimeScale timeScale = TimeScale.fromString(request.params("time-scale"));
         LOGGER.info("GET /v2/trends/" + timeScale);
 
-        final TrendsProvider.Builder builder = new TrendsProvider.Builder();
+        final RandomTrendsProvider.Builder builder = new RandomTrendsProvider.Builder();
 
         if (request.queryParams().contains("ns_today")) {
             final String todayRaw = request.queryParams("ns_today");

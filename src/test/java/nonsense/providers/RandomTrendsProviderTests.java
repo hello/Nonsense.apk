@@ -24,12 +24,12 @@ import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class TrendsProviderTests {
-    private TrendsProvider provider;
+public class RandomTrendsProviderTests {
+    private RandomTrendsProvider provider;
 
     @Before
     public void setUp() {
-        this.provider = new TrendsProvider.Builder()
+        this.provider = new RandomTrendsProvider.Builder()
                 .setLocale(Locale.US)
                 .setToday(LocalDate.of(2016, 1, 25))
                 .build();
@@ -133,13 +133,13 @@ public class TrendsProviderTests {
         final List<Double> values = new ArrayList<>();
         values.add(42.0);
 
-        TrendsProvider.nullPadList(values, 5, 0);
+        RandomTrendsProvider.nullPadList(values, 5, 0);
         assertThat(values.size(), is(equalTo(6)));
 
-        TrendsProvider.nullPadList(values, 0, 5);
+        RandomTrendsProvider.nullPadList(values, 0, 5);
         assertThat(values.size(), is(equalTo(11)));
 
-        TrendsProvider.nullPadList(values, 1, 1);
+        RandomTrendsProvider.nullPadList(values, 1, 1);
         assertThat(values.size(), is(equalTo(13)));
 
         assertThat(values, is(equalTo(Lists.newArrayList(null, null, null, null, null, null,
