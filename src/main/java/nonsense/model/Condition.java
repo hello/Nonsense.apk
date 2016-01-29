@@ -1,5 +1,7 @@
 package nonsense.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 import nonsense.model.util.Enums;
 
 public enum Condition {
@@ -8,6 +10,7 @@ public enum Condition {
     IDEAL,
     UNKNOWN;
 
+    @JsonCreator
     public static Condition fromString(String string) {
         return Enums.fromString(string, values(), UNKNOWN);
     }
