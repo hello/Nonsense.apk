@@ -1,4 +1,4 @@
-package nonsense.model.timeline;
+package nonsense.model.timeline.v1;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -10,10 +10,11 @@ import java.util.Optional;
 import java.util.OptionalLong;
 
 import nonsense.model.Condition;
+import nonsense.model.Formats;
 
 public class TimelineV1 {
     @JsonProperty("date")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Formats.DATE)
     public final LocalDate date;
 
     @JsonProperty("insights")

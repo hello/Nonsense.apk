@@ -8,6 +8,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.TimeZone;
 
+import nonsense.model.Formats;
 import nonsense.model.util.Enums;
 
 public class Account {
@@ -35,15 +36,15 @@ public class Account {
     public final Integer weight;
 
     @JsonProperty("dob")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Formats.DATE)
     public final LocalDate birthDate;
 
     @JsonProperty("created")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Formats.DATE_TIME)
     public final ZonedDateTime created;
 
     @JsonProperty("last_modified")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ssZ")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Formats.DATE_TIME)
     public final ZonedDateTime lastModified;
 
 
