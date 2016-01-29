@@ -3,7 +3,9 @@ package nonsense.model.util;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 public class EnumsTests {
@@ -16,6 +18,14 @@ public class EnumsTests {
         assertThat(Enums.fromString("THIRD", Values.values(), Values.UNKNOWN), is(equalTo(Values.THIRD)));
         assertThat(Enums.fromString("third", Values.values(), Values.UNKNOWN), is(equalTo(Values.THIRD)));
         assertThat(Enums.fromString("???", Values.values(), Values.UNKNOWN), is(equalTo(Values.UNKNOWN)));
+    }
+
+    @Test
+    public void random() {
+        final Values[] values = Values.values();
+        for (int i = 0; i < 100; i++) {
+            assertThat(Enums.random(values), is(notNullValue()));
+        }
     }
 
     enum Values {
