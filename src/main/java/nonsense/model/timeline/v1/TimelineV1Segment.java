@@ -21,7 +21,7 @@ public class TimelineV1Segment {
     public final Optional<String> message;
 
     @JsonProperty("offset_millis")
-    public final long tzOffsetMillis;
+    public final int tzOffsetMillis;
 
     @JsonProperty("sleep_depth")
     public final int sleepDepth;
@@ -37,7 +37,7 @@ public class TimelineV1Segment {
                              Type eventType,
                              long id,
                              Optional<String> message,
-                             long tzOffsetMillis,
+                             int tzOffsetMillis,
                              int sleepDepth,
                              LocalDateTime timestamp,
                              List<String> sensors) {
@@ -66,6 +66,7 @@ public class TimelineV1Segment {
     }
 
     public enum Type {
+        NONE,
         ALARM,
         IN_BED,
         LIGHT,
@@ -79,5 +80,7 @@ public class TimelineV1Segment {
         SUNSET,
         WAKE_UP,
         SLEEPING,
+        SNORING,
+        SLEEP_TALK,
     }
 }

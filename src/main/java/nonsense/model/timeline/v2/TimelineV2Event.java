@@ -2,9 +2,11 @@ package nonsense.model.timeline.v2;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.collect.Lists;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,7 +15,7 @@ import nonsense.model.Formats;
 public class TimelineV2Event {
     @JsonProperty("timestamp")
     @JsonFormat(shape = JsonFormat.Shape.NUMBER)
-    public final LocalDate timestamp;
+    public final LocalDateTime timestamp;
 
     @JsonProperty("timezone_offset")
     public final int timezoneOffset;
@@ -36,7 +38,7 @@ public class TimelineV2Event {
     @JsonProperty("valid_actions")
     public final List<Action> validActions;
 
-    public TimelineV2Event(LocalDate timestamp,
+    public TimelineV2Event(LocalDateTime timestamp,
                            int timezoneOffset,
                            long durationMillis,
                            Optional<String> message,
@@ -73,14 +75,44 @@ public class TimelineV2Event {
         AWAKE,
         LIGHT,
         MEDIUM,
-        SOUND,
+        SOUND;
+
+        public static SleepState fromSleepDepth(int sleepDepth) {
+            if (sleepDepth < 5) {
+                return AWAKE;
+            } else if (sleepDepth < 10) {
+                return LIGHT;
+            } else if (sleepDepth < 70) {
+                return MEDIUM;
+            }
+            return SOUND;
+        }
     }
 
     public enum Action {
         ADJUST_TIME,
         VERIFY,
         REMOVE,
-        INCORRECT,
+        INCORRECT;
+
+        public static List<Action> forEventType(Type type) {
+            switch (type) {
+                case FELL_ASLEEP:
+                case IN_BED:
+                case GOT_OUT_OF_BED:
+                case WOKE_UP:
+                    return Lists.newArrayList(ADJUST_TIME, VERIFY, INCORRECT);
+                case LIGHTS_OUT:
+                case GENERIC_MOTION:
+                case PARTNER_MOTION:
+                case GENERIC_SOUND:
+                case SNORED:
+                case SLEEP_TALKED:
+                    return Lists.newArrayList(VERIFY, INCORRECT);
+                default:
+                    return Collections.emptyList();
+            }
+        }
     }
 
     public enum Type {
@@ -100,27 +132,5 @@ public class TimelineV2Event {
         WOKE_UP,
         ALARM_RANG,
         UNKNOWN,
-    }
-
-    public static class TimeAmendment {
-        @JsonProperty("new_event_time")
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Formats.TIME)
-        public final LocalTime newTime;
-
-        @JsonProperty("timezone_offset")
-        public final long timeZoneOffset;
-
-        public TimeAmendment(@JsonProperty("new_event_time") LocalTime newTime,
-                             @JsonProperty("timezone_offset") long timeZoneOffset) {
-            this.newTime = newTime;
-            this.timeZoneOffset = timeZoneOffset;
-        }
-
-        @Override
-        public String toString() {
-            return "TimeAmendment{" +
-                    "newTime=" + newTime +
-                    '}';
-        }
     }
 }

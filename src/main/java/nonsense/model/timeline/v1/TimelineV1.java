@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import nonsense.model.Formats;
 
@@ -26,14 +27,14 @@ public class TimelineV1 {
     public final List<TimelineV1Segment> segments;
 
     @JsonProperty("statistics")
-    public final TimelineV1Statistics statistics;
+    public final Optional<TimelineV1Statistics> statistics;
 
     public TimelineV1(LocalDate date,
                       List<TimelineV1Insight> insights,
                       String message,
                       int score,
                       List<TimelineV1Segment> segments,
-                      TimelineV1Statistics statistics) {
+                      Optional<TimelineV1Statistics> statistics) {
         this.date = date;
         this.insights = insights;
         this.message = message;
@@ -53,6 +54,4 @@ public class TimelineV1 {
                 ", statistics=" + statistics +
                 '}';
     }
-
-
 }
