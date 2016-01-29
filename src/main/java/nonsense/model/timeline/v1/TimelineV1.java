@@ -29,12 +29,12 @@ public class TimelineV1 {
     @JsonProperty("statistics")
     public final Optional<TimelineV1Statistics> statistics;
 
-    public TimelineV1(LocalDate date,
-                      List<TimelineV1Insight> insights,
-                      String message,
-                      int score,
-                      List<TimelineV1Segment> segments,
-                      Optional<TimelineV1Statistics> statistics) {
+    public TimelineV1(@JsonProperty("date") LocalDate date,
+                      @JsonProperty("insights") List<TimelineV1Insight> insights,
+                      @JsonProperty("message") String message,
+                      @JsonProperty("score") int score,
+                      @JsonProperty("segments") List<TimelineV1Segment> segments,
+                      @JsonProperty("statistics") Optional<TimelineV1Statistics> statistics) {
         this.date = date;
         this.insights = insights;
         this.message = message;

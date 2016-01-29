@@ -14,9 +14,9 @@ public class TimelineV1Insight {
     @JsonProperty("sensor")
     public final Sensor sensor;
 
-    public TimelineV1Insight(Condition condition,
-                             String message,
-                             Sensor sensor) {
+    public TimelineV1Insight(@JsonProperty("condition") Condition condition,
+                             @JsonProperty("message") String message,
+                             @JsonProperty("sensor") Sensor sensor) {
         this.condition = condition;
         this.message = message;
         this.sensor = sensor;

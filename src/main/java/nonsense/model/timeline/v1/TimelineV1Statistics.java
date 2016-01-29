@@ -17,10 +17,10 @@ public class TimelineV1Statistics {
     @JsonProperty("total_sleep")
     public final OptionalLong totalSleep;
 
-    public TimelineV1Statistics(OptionalLong soundSleep,
-                                OptionalLong timeToSleep,
-                                OptionalLong timesAwake,
-                                OptionalLong totalSleep) {
+    public TimelineV1Statistics(@JsonProperty("sound_sleep") OptionalLong soundSleep,
+                                @JsonProperty("time_to_sleep") OptionalLong timeToSleep,
+                                @JsonProperty("times_awake") OptionalLong timesAwake,
+                                @JsonProperty("total_sleep") OptionalLong totalSleep) {
         this.soundSleep = soundSleep;
         this.timeToSleep = timeToSleep;
         this.timesAwake = timesAwake;
