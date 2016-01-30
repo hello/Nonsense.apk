@@ -1,5 +1,8 @@
 package nonsense.providers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -24,6 +27,8 @@ import nonsense.util.RandomUtil;
 import nonsense.util.Requests;
 
 public class RandomTimelineSource implements TimelineSource {
+    private static final Logger LOGGER = LoggerFactory.getLogger(RandomTimelineSource.class);
+
     private static final TimelineV1Segment.Type[] EVENT_TYPES = {
             TimelineV1Segment.Type.ALARM,
             TimelineV1Segment.Type.LIGHT,
@@ -59,6 +64,8 @@ public class RandomTimelineSource implements TimelineSource {
 
     @Override
     public TimelineV1 getTimelineV1ForDate(LocalDate date) {
+        LOGGER.info("Generating timeline (v1) for date {}", date);
+
         final LocalDateTime startTimestamp = generateStartTimestamp(date);
 
         int durationSeconds = generateDurationSeconds();
@@ -143,6 +150,8 @@ public class RandomTimelineSource implements TimelineSource {
     }
 
     public TimelineV1Insight generateInsight(TimelineV1Insight.Sensor sensor) {
+        LOGGER.info("Generating insight for sensory {}", sensor);
+
         final Condition condition = Enums.random(Condition.ALERT,
                                                  Condition.WARNING,
                                                  Condition.IDEAL);
@@ -165,6 +174,8 @@ public class RandomTimelineSource implements TimelineSource {
     }
 
     public TimelineV1Segment generateSegment(LocalDateTime timestamp, TimelineV1Segment.Type type) {
+        LOGGER.info("Generating segment for timestamp {} and type {}", timestamp, type);
+
         final long duration = RandomUtil.integerInRange(random, 0, 60);
         final Optional<String> message = (type == TimelineV1Segment.Type.SLEEPING)
                 ? Optional.empty()

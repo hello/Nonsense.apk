@@ -3,6 +3,9 @@ package nonsense.providers;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.Month;
@@ -15,7 +18,6 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.Random;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import nonsense.model.Condition;
@@ -30,7 +32,7 @@ import nonsense.util.RandomUtil;
 import nonsense.util.Requests;
 
 public class RandomTrendsSource implements TrendsSource {
-    private static final Logger LOGGER = Logger.getLogger(RandomTrendsSource.class.getSimpleName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(RandomTrendsSource.class.getSimpleName());
 
     private static final int DAYS_IN_WEEK = 7;
     private static final int MIN_AGE_SCORES = 3;
@@ -71,15 +73,14 @@ public class RandomTrendsSource implements TrendsSource {
         if (accountAgeDays >= MIN_AGE_DEPTHS) {
             graphs.add(generateSleepDepthGraph(timeScale));
         }
-        LOGGER.info("Generated " + graphs.size() + " graphs, available time scales: " + availableTimeScales);
+        LOGGER.info("Generated {} graphs, available time scales: {}", graphs.size(), availableTimeScales);
         return new Trends(availableTimeScales, graphs);
     }
 
 
     //region Generating Graphs
 
-    @VisibleForTesting
-    Graph generateSleepScoreGraph(TimeScale timeScale) {
+    public Graph generateSleepScoreGraph(TimeScale timeScale) {
         final List<GraphSection> sections;
         final GraphType graphType;
         if (timeScale == TimeScale.LAST_WEEK) {
@@ -112,8 +113,7 @@ public class RandomTrendsSource implements TrendsSource {
                                    generateAnnotations(DataType.SCORES));
     }
 
-    @VisibleForTesting
-    Graph generateSleepDurationGraph(TimeScale timeScale) {
+    public Graph generateSleepDurationGraph(TimeScale timeScale) {
         final List<GraphSection> sections = new ArrayList<>();
         if (timeScale == TimeScale.LAST_WEEK) {
             final List<String> titles = daysOfWeek();
@@ -176,8 +176,7 @@ public class RandomTrendsSource implements TrendsSource {
                                       generateAnnotations(DataType.HOURS));
     }
 
-    @VisibleForTesting
-    Graph generateSleepDepthGraph(TimeScale timeScale) {
+    public Graph generateSleepDepthGraph(TimeScale timeScale) {
         final List<Double> values = generateValues(DataType.PERCENTS, 3);
         final List<GraphSection> sections = Lists.newArrayList(GraphSection.newSleepDepth(values));
         return Graph.newSleepDepth(timeScale, sections);
@@ -188,15 +187,13 @@ public class RandomTrendsSource implements TrendsSource {
 
     //region Generating Values
 
-    @VisibleForTesting
-    List<String> daysOfWeek() {
+    public List<String> daysOfWeek() {
         return Arrays.stream(DayOfWeek.values())
                      .map(day -> day.getDisplayName(TextStyle.SHORT, locale))
                      .collect(Collectors.toList());
     }
 
-    @VisibleForTesting
-    List<Annotation> generateAnnotations(DataType dataType) {
+    public List<Annotation> generateAnnotations(DataType dataType) {
         final List<Annotation> annotations = new ArrayList<>();
         annotations.add(generateAnnotation("Weekdays", dataType));
         annotations.add(generateAnnotation("Weekends", dataType));
@@ -204,8 +201,7 @@ public class RandomTrendsSource implements TrendsSource {
         return annotations;
     }
 
-    @VisibleForTesting
-    Annotation generateAnnotation(String title, DataType dataType) {
+    public Annotation generateAnnotation(String title, DataType dataType) {
         final double value = RandomUtil.doubleInRange(random, dataType.generatedMin, dataType.generatedMax);
         final Optional<Condition> condition = dataType.getConditionForValue(value);
         return new Annotation(title, value, dataType, condition);
@@ -216,7 +212,7 @@ public class RandomTrendsSource implements TrendsSource {
         if (weekCount == 1 && accountAgeDays < DAYS_IN_WEEK) {
             allValues = generateValues(DataType.SCORES, accountAgeDays);
             final int backFillCount = DAYS_IN_WEEK - accountAgeDays;
-            LOGGER.info("Account age less than 1 week, back filling " + backFillCount + " value(s)");
+            LOGGER.info("Account age less than 1 week, back filling {} value(s)", backFillCount);
             for (int i = 0; i < backFillCount; i++) {
                 allValues.add(0, -1.0);
             }
@@ -255,7 +251,7 @@ public class RandomTrendsSource implements TrendsSource {
 
     @VisibleForTesting
     List<Double> generateValues(DataType dataType, int count) {
-        LOGGER.info("Generating " + count + " values(s) of " + dataType);
+        LOGGER.info("Generating {} values(s) of {}", count, dataType);
 
         final List<Double> values = new ArrayList<>(count);
         for (int i = 0; i < count; i++) {
