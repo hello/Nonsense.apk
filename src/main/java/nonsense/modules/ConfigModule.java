@@ -5,6 +5,9 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import nonsense.Application;
+import nonsense.model.Configuration;
+import nonsense.providers.RandomTimelineSource;
+import nonsense.providers.RandomTrendsSource;
 import nonsense.providers.TimelineSource;
 import nonsense.providers.TrendsSource;
 
@@ -13,20 +16,21 @@ import nonsense.providers.TrendsSource;
                 Application.class,
         })
 public class ConfigModule {
-    private final TrendsSource.Factory trendsSourceFactory;
-    private final TimelineSource.Factory timelineSourceFactory;
+    private final Configuration configuration;
 
-    public ConfigModule(TrendsSource.Factory trendsSourceFactory,
-                        TimelineSource.Factory timelineSourceFactory) {
-        this.trendsSourceFactory = trendsSourceFactory;
-        this.timelineSourceFactory = timelineSourceFactory;
+    public ConfigModule(Configuration configuration) {
+        this.configuration = configuration;
+    }
+
+    @Provides Configuration provideConfiguration() {
+        return configuration;
     }
 
     @Singleton @Provides TrendsSource.Factory provideTrendsSourceFactory() {
-        return trendsSourceFactory;
+        return RandomTrendsSource.createFactory();
     }
 
     @Singleton @Provides TimelineSource.Factory provideTimelineSourceFactory() {
-        return timelineSourceFactory;
+        return RandomTimelineSource.createFactory();
     }
 }

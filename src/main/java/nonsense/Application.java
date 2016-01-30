@@ -8,6 +8,7 @@ import java.util.Collections;
 
 import javax.inject.Inject;
 
+import nonsense.model.Configuration;
 import nonsense.model.Types;
 import nonsense.model.account.Account;
 import nonsense.model.oauth.AccessToken;
@@ -24,13 +25,14 @@ public class Application {
     private static final Logger LOGGER = LoggerFactory.getLogger(Application.class.getSimpleName());
 
     @Inject ResponseTransformer transformer;
+    @Inject Configuration configuration;
     @Inject TrendsSource.Factory trendsFactory;
     @Inject TimelineSource.Factory timelineFactory;
 
     public void init() {
-        LOGGER.info("Initializing on port 3000");
+        LOGGER.info("Initializing on port {}", configuration.getPort());
 
-        port(3000);
+        port(configuration.getPort());
         routes();
     }
 
