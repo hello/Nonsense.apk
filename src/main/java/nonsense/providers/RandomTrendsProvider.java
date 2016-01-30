@@ -27,6 +27,7 @@ import nonsense.model.trends.GraphType;
 import nonsense.model.trends.TimeScale;
 import nonsense.model.trends.Trends;
 import nonsense.util.RandomUtil;
+import nonsense.util.Requests;
 
 public class RandomTrendsProvider implements TrendsProvider {
     private static final Logger LOGGER = Logger.getLogger(RandomTrendsProvider.class.getSimpleName());
@@ -41,9 +42,17 @@ public class RandomTrendsProvider implements TrendsProvider {
     private final int accountAgeDays;
     private final Random random = new Random();
 
-    RandomTrendsProvider(LocalDate today,
-                         Locale locale,
-                         int accountAgeDays) {
+    public static Factory createFactory() {
+        return request -> {
+            return new RandomTrendsProvider(Requests.queryParamLocalDate(request, Requests.TODAY, () -> LocalDate.now().minusDays(1)),
+                                            Requests.queryParamLocale(request, Requests.LOCALE),
+                                            Requests.queryParamInteger(request, Requests.ACCOUNT_AGE, 90));
+        };
+    }
+
+    public RandomTrendsProvider(LocalDate today,
+                                Locale locale,
+                                int accountAgeDays) {
         this.today = today;
         this.locale = locale;
         this.accountAgeDays = accountAgeDays;
@@ -273,30 +282,4 @@ public class RandomTrendsProvider implements TrendsProvider {
     }
 
     //endregion
-
-
-    public static class Builder {
-        private LocalDate today = LocalDate.now().minusDays(1);
-        private Locale locale = Locale.getDefault();
-        private int accountAgeDays = 90;
-
-        public Builder setToday(LocalDate today) {
-            this.today = today;
-            return this;
-        }
-
-        public Builder setLocale(Locale locale) {
-            this.locale = locale;
-            return this;
-        }
-
-        public Builder setAccountAgeDays(int accountAgeDays) {
-            this.accountAgeDays = accountAgeDays;
-            return this;
-        }
-
-        public RandomTrendsProvider build() {
-            return new RandomTrendsProvider(today, locale, accountAgeDays);
-        }
-    }
 }

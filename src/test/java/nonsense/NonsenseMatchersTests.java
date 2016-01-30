@@ -2,13 +2,13 @@ package nonsense;
 
 import org.junit.Test;
 
+import static nonsense.NonsenseMatchers.greaterThan;
 import static nonsense.NonsenseMatchers.greaterThanOrEqual;
 import static nonsense.NonsenseMatchers.lessThan;
 import static nonsense.NonsenseMatchers.lessThanOrEqual;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
-import static nonsense.NonsenseMatchers.greaterThan;
 
 public class NonsenseMatchersTests {
     @Test

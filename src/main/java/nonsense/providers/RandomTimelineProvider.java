@@ -21,6 +21,7 @@ import nonsense.model.timeline.v1.TimelineV1Segment;
 import nonsense.model.timeline.v1.TimelineV1Statistics;
 import nonsense.util.Enums;
 import nonsense.util.RandomUtil;
+import nonsense.util.Requests;
 
 public class RandomTimelineProvider implements TimelineProvider {
     private static final TimelineV1Segment.Type[] EVENT_TYPES = {
@@ -43,6 +44,13 @@ public class RandomTimelineProvider implements TimelineProvider {
     private final Random random = new Random();
     private final ZoneOffset timeZone;
     private final Locale locale;
+
+    public static Factory createFactory() {
+        return request -> {
+            return new RandomTimelineProvider(Requests.queryParamTimeZone(request, Requests.TIME_ZONE),
+                                              Requests.queryParamLocale(request, Requests.LOCALE));
+        };
+    }
 
     public RandomTimelineProvider(ZoneOffset timeZone, Locale locale) {
         this.timeZone = timeZone;

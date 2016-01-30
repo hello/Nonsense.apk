@@ -29,10 +29,9 @@ public class RandomTrendsProviderTests {
 
     @Before
     public void setUp() {
-        this.provider = new RandomTrendsProvider.Builder()
-                .setLocale(Locale.US)
-                .setToday(LocalDate.of(2016, 1, 25))
-                .build();
+        this.provider = new RandomTrendsProvider(LocalDate.of(2016, 1, 25),
+                                                 Locale.US,
+                                                 90);
     }
 
     @Test

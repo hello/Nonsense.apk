@@ -9,12 +9,14 @@ import java.util.Collections;
 import java.util.Locale;
 import java.util.logging.Logger;
 
+import nonsense.providers.RandomTimelineProvider;
 import nonsense.providers.RandomTrendsProvider;
 import nonsense.model.Types;
 import nonsense.model.account.Account;
 import nonsense.model.oauth.AccessToken;
 import nonsense.model.trends.TimeScale;
 import nonsense.model.trends.Trends;
+import nonsense.providers.TrendsProvider;
 import nonsense.response.JacksonTransformer;
 import spark.Request;
 import spark.Response;
@@ -26,6 +28,7 @@ import static spark.Spark.post;
 
 public class Nonsense {
     private static final Logger LOGGER = Logger.getLogger(Nonsense.class.getSimpleName());
+    private static final TrendsProvider.Factory TRENDS_FACTORY = RandomTrendsProvider.createFactory();
 
     private static ObjectMapper createObjectMapper() {
         final ObjectMapper objectMapper = new ObjectMapper();
@@ -65,28 +68,7 @@ public class Nonsense {
     public static Trends trends(Request request, Response response) {
         final TimeScale timeScale = TimeScale.fromString(request.params("time-scale"));
         LOGGER.info("GET /v2/trends/" + timeScale);
-
-        final RandomTrendsProvider.Builder builder = new RandomTrendsProvider.Builder();
-
-        if (request.queryParams().contains("ns_today")) {
-            final String todayRaw = request.queryParams("ns_today");
-            final LocalDate today = LocalDate.parse(todayRaw);
-            builder.setToday(today);
-        }
-
-        if (request.queryParams().contains("ns_account_age")) {
-            final String accountAgeRaw = request.queryParams("ns_account_age");
-            final int accountAge = Integer.valueOf(accountAgeRaw, 10);
-            builder.setAccountAgeDays(accountAge);
-        }
-
-        if (request.queryParams().contains("ns_locale")) {
-            final String localeRaw = request.queryParams("ns_locale");
-            final Locale locale = Locale.forLanguageTag(localeRaw);
-            builder.setLocale(locale);
-        }
-
         response.type(Types.JSON);
-        return builder.build().getTrendsForTimeScale(timeScale);
+        return TRENDS_FACTORY.create(request).getTrendsForTimeScale(timeScale);
     }
 }
