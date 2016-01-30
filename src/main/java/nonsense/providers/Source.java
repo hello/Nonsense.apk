@@ -2,9 +2,9 @@ package nonsense.providers;
 
 import spark.Request;
 
-public interface Provider {
+public interface Source {
     @FunctionalInterface
-    interface Factory<T extends Provider> {
+    interface Factory<T extends Source> {
         T create(Request request);
     }
 }

@@ -23,7 +23,7 @@ import nonsense.util.Enums;
 import nonsense.util.RandomUtil;
 import nonsense.util.Requests;
 
-public class RandomTimelineProvider implements TimelineProvider {
+public class RandomTimelineSource implements TimelineSource {
     private static final TimelineV1Segment.Type[] EVENT_TYPES = {
             TimelineV1Segment.Type.ALARM,
             TimelineV1Segment.Type.LIGHT,
@@ -47,12 +47,12 @@ public class RandomTimelineProvider implements TimelineProvider {
 
     public static Factory createFactory() {
         return request -> {
-            return new RandomTimelineProvider(Requests.queryParamTimeZone(request, Requests.TIME_ZONE),
-                                              Requests.queryParamLocale(request, Requests.LOCALE));
+            return new RandomTimelineSource(Requests.queryParamTimeZone(request, Requests.TIME_ZONE),
+                                            Requests.queryParamLocale(request, Requests.LOCALE));
         };
     }
 
-    public RandomTimelineProvider(ZoneOffset timeZone, Locale locale) {
+    public RandomTimelineSource(ZoneOffset timeZone, Locale locale) {
         this.timeZone = timeZone;
         this.locale = locale;
     }

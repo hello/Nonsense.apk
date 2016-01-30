@@ -6,6 +6,7 @@
 
     <properties>
         <jackson.version>2.7.0</jackson.version>
+        <dagger.version>1.2.2</dagger.version>
     </properties>
 
     <groupId>is.hello</groupId>
@@ -68,13 +69,13 @@
         <dependency>
             <groupId>com.squareup.dagger</groupId>
             <artifactId>dagger</artifactId>
-            <version>1.2.2</version>
+            <version>${dagger.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.squareup.dagger</groupId>
             <artifactId>dagger-compiler</artifactId>
-            <version>1.2.2</version>
+            <version>${dagger.version}</version>
             <optional>true</optional>
         </dependency>
 

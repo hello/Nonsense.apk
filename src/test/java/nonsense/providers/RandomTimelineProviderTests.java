@@ -29,11 +29,11 @@ import static org.junit.Assert.assertThat;
 
 public class RandomTimelineProviderTests {
     private final ZoneOffset timeZone = ZoneOffset.UTC;
-    private RandomTimelineProvider provider;
+    private RandomTimelineSource provider;
 
     @Before
     public void setUp() {
-        this.provider = new RandomTimelineProvider(timeZone, Locale.US);
+        this.provider = new RandomTimelineSource(timeZone, Locale.US);
     }
 
     @Test

@@ -6,7 +6,7 @@ import nonsense.model.timeline.VersionTranslator;
 import nonsense.model.timeline.v1.TimelineV1;
 import nonsense.model.timeline.v2.TimelineV2;
 
-public interface TimelineProvider extends Provider {
+public interface TimelineSource extends Source {
     TimelineV1 getTimelineV1ForDate(LocalDate date);
 
     default TimelineV2 getTimelineV2ForDate(LocalDate date) {
@@ -15,6 +15,6 @@ public interface TimelineProvider extends Provider {
     }
 
     @FunctionalInterface
-    interface Factory extends Provider.Factory<TimelineProvider> {
+    interface Factory extends Source.Factory<TimelineSource> {
     }
 }

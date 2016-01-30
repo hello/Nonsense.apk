@@ -29,8 +29,8 @@ import nonsense.model.trends.Trends;
 import nonsense.util.RandomUtil;
 import nonsense.util.Requests;
 
-public class RandomTrendsProvider implements TrendsProvider {
-    private static final Logger LOGGER = Logger.getLogger(RandomTrendsProvider.class.getSimpleName());
+public class RandomTrendsSource implements TrendsSource {
+    private static final Logger LOGGER = Logger.getLogger(RandomTrendsSource.class.getSimpleName());
 
     private static final int DAYS_IN_WEEK = 7;
     private static final int MIN_AGE_SCORES = 3;
@@ -44,15 +44,15 @@ public class RandomTrendsProvider implements TrendsProvider {
 
     public static Factory createFactory() {
         return request -> {
-            return new RandomTrendsProvider(Requests.queryParamLocalDate(request, Requests.TODAY, () -> LocalDate.now().minusDays(1)),
-                                            Requests.queryParamLocale(request, Requests.LOCALE),
-                                            Requests.queryParamInteger(request, Requests.ACCOUNT_AGE, 90));
+            return new RandomTrendsSource(Requests.queryParamLocalDate(request, Requests.TODAY, () -> LocalDate.now().minusDays(1)),
+                                          Requests.queryParamLocale(request, Requests.LOCALE),
+                                          Requests.queryParamInteger(request, Requests.ACCOUNT_AGE, 90));
         };
     }
 
-    public RandomTrendsProvider(LocalDate today,
-                                Locale locale,
-                                int accountAgeDays) {
+    public RandomTrendsSource(LocalDate today,
+                              Locale locale,
+                              int accountAgeDays) {
         this.today = today;
         this.locale = locale;
         this.accountAgeDays = accountAgeDays;
