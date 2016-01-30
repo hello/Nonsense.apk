@@ -29,6 +29,7 @@ import static spark.Spark.post;
 public class Nonsense {
     private static final Logger LOGGER = Logger.getLogger(Nonsense.class.getSimpleName());
     private static final TrendsProvider.Factory TRENDS_FACTORY = RandomTrendsProvider.createFactory();
+    private final ResponseTransformer transformer;
 
     private static ObjectMapper createObjectMapper() {
         final ObjectMapper objectMapper = new ObjectMapper();
@@ -41,34 +42,55 @@ public class Nonsense {
         return new JacksonTransformer(createObjectMapper());
     }
 
+    //region Lifecycle
+
     public static void main(String[] args) {
-        final ResponseTransformer transformer = createResponseTransformer();
+        new Nonsense(createResponseTransformer());
+    }
+
+    public Nonsense(ResponseTransformer transformer) {
+        this.transformer = transformer;
+
         port(3000);
-        get("/", Nonsense::index, transformer);
-        post("/v1/oauth2/token", Types.FORM_DATA, Nonsense::token, transformer);
-        get("/v1/account", Nonsense::account, transformer);
-        get("/v2/trends/:time-scale", Nonsense::trends, transformer);
+        setupRoutes();
     }
 
-    public static Object index(Request request, Response response) {
-        response.type(Types.JSON);
-        return Collections.emptyMap();
+    //endregion
+
+
+    //region Routes
+
+    public void setupRoutes() {
+        get("/", (request, response) -> {
+            response.type(Types.JSON);
+            return Collections.emptyMap();
+        }, transformer);
+
+        setupAccountRoutes();
+        setupTrendsRoutes();
     }
 
-    public static AccessToken token(Request request, Response response) {
-        response.type(Types.JSON);
-        return AccessToken.createFake();
+    public void setupAccountRoutes() {
+        post("/v1/oauth2/token", Types.FORM_DATA, (request, response) -> {
+            response.type(Types.JSON);
+            return AccessToken.createFake();
+        }, transformer);
+
+        get("/v1/account", (request, response) -> {
+            response.type(Types.JSON);
+            return Account.createFake();
+        }, transformer);
     }
 
-    public static Account account(Request request, Response response) {
-        response.type(Types.JSON);
-        return Account.createFake();
+    public void setupTrendsRoutes() {
+        get("/v2/trends/:time-scale", (request, response) -> {
+            final TimeScale timeScale = TimeScale.fromString(request.params("time-scale"));
+            LOGGER.info("GET /v2/trends/" + timeScale);
+            response.type(Types.JSON);
+            return TRENDS_FACTORY.create(request)
+                                 .getTrendsForTimeScale(timeScale);
+        }, transformer);
     }
 
-    public static Trends trends(Request request, Response response) {
-        final TimeScale timeScale = TimeScale.fromString(request.params("time-scale"));
-        LOGGER.info("GET /v2/trends/" + timeScale);
-        response.type(Types.JSON);
-        return TRENDS_FACTORY.create(request).getTrendsForTimeScale(timeScale);
-    }
+    //endregion
 }
