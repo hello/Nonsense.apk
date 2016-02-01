@@ -75,7 +75,8 @@ public class RandomTimelineSource implements TimelineSource {
 
         final List<TimelineV1Segment> segments = new ArrayList<>();
         while (elapsedDurationSeconds < durationSeconds) {
-            final LocalDateTime timestamp = startTimestamp.plusSeconds(elapsedDurationSeconds);
+            final long timestamp = startTimestamp.plusSeconds(elapsedDurationSeconds)
+                                                 .toEpochSecond(ZoneOffset.UTC) * 1000L;
             final TimelineV1Segment.Type type = generateSegmentType();
             final TimelineV1Segment segment = generateSegment(timestamp, type);
             segments.add(segment);
@@ -173,7 +174,7 @@ public class RandomTimelineSource implements TimelineSource {
         return new TimelineV1Insight(condition, message, sensor);
     }
 
-    public TimelineV1Segment generateSegment(LocalDateTime timestamp, TimelineV1Segment.Type type) {
+    public TimelineV1Segment generateSegment(long timestamp, TimelineV1Segment.Type type) {
         LOGGER.info("Generating segment for timestamp {} and type {}", timestamp, type);
 
         final long duration = RandomUtil.integerInRange(random, 0, 60);
@@ -187,7 +188,8 @@ public class RandomTimelineSource implements TimelineSource {
                                      timeZone.getTotalSeconds() * 1000,
                                      RandomUtil.integerInRange(random, 0, 100),
                                      timestamp,
-                                     Collections.emptyList());
+                                     Collections.emptyList(),
+                                     Optional.empty());
     }
 
     public TimelineV1Segment.Type generateSegmentType() {

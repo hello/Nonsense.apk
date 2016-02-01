@@ -70,13 +70,15 @@ public class VersionTranslatorTests {
         final TimelineV1Segment fellAsleep = new TimelineV1Segment(100, TimelineV1Segment.Type.SLEEP,
                                                                    0, Optional.empty(),
                                                                    TZ_OFFSET, 50,
-                                                                   now.minusHours(10L),
-                                                                   Collections.emptyList());
+                                                                   now.minusHours(10L).toEpochSecond(ZoneOffset.UTC) * 1000L,
+                                                                   Collections.emptyList(),
+                                                                   Optional.empty());
         final TimelineV1Segment wokeUp = new TimelineV1Segment(100, TimelineV1Segment.Type.WAKE_UP,
                                                                0, Optional.empty(),
                                                                TZ_OFFSET, 50,
-                                                               now.minusHours(10L),
-                                                               Collections.emptyList());
+                                                               now.minusHours(10L).toEpochSecond(ZoneOffset.UTC) * 1000L,
+                                                               Collections.emptyList(),
+                                                               Optional.empty());
 
         final List<TimelineV2Metric> metrics = VersionTranslator.translateSegmentsToMetrics(Lists.newArrayList(fellAsleep, wokeUp));
         assertThat(metrics.size(), is(equalTo(2)));
@@ -122,19 +124,22 @@ public class VersionTranslatorTests {
 
     @Test
     public void translateSegmentToEvent() {
+        final long timestamp = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) * 1000L;
         final TimelineV1Segment awakeInBed = new TimelineV1Segment(100, TimelineV1Segment.Type.NONE,
                                                                    0, Optional.empty(),
                                                                    TZ_OFFSET, 50,
-                                                                   LocalDateTime.now(),
-                                                                   Collections.emptyList());
+                                                                   timestamp,
+                                                                   Collections.emptyList(),
+                                                                   Optional.empty());
         final TimelineV2Event awakeInBedEvent = VersionTranslator.translateSegmentToEvent(awakeInBed);
         assertThat(awakeInBedEvent.sleepState, is(equalTo(TimelineV2Event.SleepState.AWAKE)));
         assertThat(awakeInBedEvent.type, is(equalTo(TimelineV2Event.Type.IN_BED)));
 
         final TimelineV1Segment normalSegment = new TimelineV1Segment(60, TimelineV1Segment.Type.WAKE_UP,
                                                                       0, Optional.of("You woke up"),
-                                                                      TZ_OFFSET, 50, LocalDateTime.now(),
-                                                                      Collections.emptyList());
+                                                                      TZ_OFFSET, 50, timestamp,
+                                                                      Collections.emptyList(),
+                                                                      Optional.empty());
         final TimelineV2Event normalEvent = VersionTranslator.translateSegmentToEvent(normalSegment);
         assertThat(normalEvent.type, is(equalTo(TimelineV2Event.Type.WOKE_UP)));
         assertThat(normalEvent.sleepState, is(equalTo(TimelineV2Event.SleepState.MEDIUM)));

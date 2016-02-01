@@ -1,10 +1,8 @@
 package nonsense.model.timeline.v1;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,11 +28,13 @@ public class TimelineV1Segment {
     public final int sleepDepth;
 
     @JsonProperty("timestamp")
-    @JsonFormat(shape = JsonFormat.Shape.NUMBER)
-    public final LocalDateTime timestamp;
+    public final long timestamp;
 
     @JsonProperty("sensors")
     public final List<String> sensors;
+
+    @JsonProperty("sound")
+    public final Optional<String> sound;
 
     public TimelineV1Segment(@JsonProperty("duration") long duration,
                              @JsonProperty("event_type") Type eventType,
@@ -42,8 +42,9 @@ public class TimelineV1Segment {
                              @JsonProperty("message") Optional<String> message,
                              @JsonProperty("offset_millis") int tzOffsetMillis,
                              @JsonProperty("sleep_depth") int sleepDepth,
-                             @JsonProperty("timestamp") LocalDateTime timestamp,
-                             @JsonProperty("sensors") List<String> sensors) {
+                             @JsonProperty("timestamp") long timestamp,
+                             @JsonProperty("sensors") List<String> sensors,
+                             @JsonProperty("sound") Optional<String> sound) {
         this.duration = duration;
         this.eventType = eventType;
         this.id = id;
@@ -52,6 +53,7 @@ public class TimelineV1Segment {
         this.sleepDepth = sleepDepth;
         this.timestamp = timestamp;
         this.sensors = sensors;
+        this.sound = sound;
     }
 
     @Override

@@ -130,7 +130,7 @@ public class RandomTimelineProviderTests {
 
     @Test
     public void generateSegment() {
-        final LocalDateTime timestamp = LocalDateTime.now();
+        final long timestamp = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) * 1000L;
         final TimelineV1Segment notSleepingSegment = provider.generateSegment(timestamp, TimelineV1Segment.Type.IN_BED);
         assertThat(notSleepingSegment.duration, is(allOf(greaterThanOrEqual(0L), lessThanOrEqual(60L))));
         assertThat(notSleepingSegment.eventType, is(equalTo(TimelineV1Segment.Type.IN_BED)));

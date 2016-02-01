@@ -1,6 +1,5 @@
 package nonsense.model.timeline;
 
-import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -59,7 +58,7 @@ public class VersionTranslator {
 
         final OptionalLong fellAsleep = segments.stream()
                                                 .filter(segment -> segment.eventType == TimelineV1Segment.Type.SLEEP)
-                                                .mapToLong(segment -> segment.timestamp.toEpochSecond(ZoneOffset.UTC))
+                                                .mapToLong(segment -> segment.timestamp)
                                                 .findFirst();
         fellAsleep.ifPresent(timestamp -> {
             metrics.add(new TimelineV2Metric(TimelineV2Metric.Name.FELL_ASLEEP, OptionalLong.of(timestamp),
@@ -68,7 +67,7 @@ public class VersionTranslator {
 
         final OptionalLong wokeUp = segments.stream()
                                             .filter(segment -> segment.eventType == TimelineV1Segment.Type.WAKE_UP)
-                                            .mapToLong(segment -> segment.timestamp.toEpochSecond(ZoneOffset.UTC))
+                                            .mapToLong(segment -> segment.timestamp)
                                             .findFirst();
         wokeUp.ifPresent(timestamp -> {
             metrics.add(new TimelineV2Metric(TimelineV2Metric.Name.WOKE_UP, OptionalLong.of(timestamp),
