@@ -1,59 +1,40 @@
 package nonsense.model;
 
-import com.beust.jcommander.JCommander;
-import com.beust.jcommander.Parameter;
+import com.lexicalscope.jewel.cli.ArgumentValidationException;
+import com.lexicalscope.jewel.cli.Cli;
+import com.lexicalscope.jewel.cli.CliFactory;
+import com.lexicalscope.jewel.cli.CommandLineInterface;
+import com.lexicalscope.jewel.cli.Option;
 
-public class Configuration {
-    @Parameter(
-            names = {"--timeline-cache", "-c"},
+import java.io.File;
+import java.io.PrintStream;
+
+@CommandLineInterface(application = "nonsense")
+public interface Configuration {
+    @Option(shortName = "p",
+            longName = "port",
+            defaultValue = "3000",
+            description = "the port to run the server on")
+    int getPort();
+
+    @Option(shortName = "c",
+            longName = "timeline-cache",
             description = "load timelines from cache files",
-            required = false
-    )
-    private String timelineCache;
+            defaultToNull = true)
+    File getTimelineCache();
 
-    @Parameter(
-            names = {"--port", "-p"},
-            description = "the port to run the server on",
-            required = false
-    )
-    private int port = 3000;
+    @Option(shortName = "h",
+            longName = "help",
+            description = "display this message and exit")
+    boolean wantsHelp();
 
-    @Parameter(
-            names = {"-h", "--help"},
-            help = true,
-            description = "print this message",
-            required = false
-    )
-    private boolean help;
-
-    private final JCommander commander;
-
-    private Configuration(JCommander commander) {
-        this.commander = commander;
+    static Configuration parse(String[] args) throws ArgumentValidationException {
+        return CliFactory.parseArguments(Configuration.class, args);
     }
 
-    public static Configuration parse(String[] args) {
-        final JCommander commander = new JCommander();
-        final Configuration configuration = new Configuration(commander);
-        commander.addObject(configuration);
-        commander.parse(args);
-        return configuration;
-    }
-
-    public String getTimelineCache() {
-        return timelineCache;
-    }
-
-    public int getPort() {
-        return port;
-    }
-
-    public boolean wantsHelp() {
-        return help;
-    }
-
-    public void usage() {
-        commander.usage();
-        System.exit(0);
+    static void printUsage(PrintStream stream) {
+        final Cli<Configuration> cli = CliFactory.createCli(Configuration.class);
+        final String helpMessage = cli.getHelpMessage();
+        stream.println(helpMessage);
     }
 }
