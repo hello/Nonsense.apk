@@ -7,7 +7,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
-public class EnumsTests {
+public class EnumsTest {
     @Test
     public void fromString() {
         assertThat(Enums.fromString("FIRST", Values.values(), Values.UNKNOWN), is(equalTo(Values.FIRST)));

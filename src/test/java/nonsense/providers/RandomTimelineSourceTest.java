@@ -27,7 +27,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
 
-public class RandomTimelineSourceTests {
+public class RandomTimelineSourceTest {
     private final ZoneOffset timeZone = ZoneOffset.UTC;
     private RandomTimelineSource provider;
 

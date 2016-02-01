@@ -10,7 +10,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class DataTypeTests {
+public class DataTypeTest {
     @Test
     public void getConditionRanges() {
         assertThat(DataType.SCORES.getConditionRanges().isEmpty(), is(false));

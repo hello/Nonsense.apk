@@ -12,7 +12,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-public class ConfigurationTests {
+public class ConfigurationTest {
     @Test
     public void parseEmpty() {
         final String[] args = {};

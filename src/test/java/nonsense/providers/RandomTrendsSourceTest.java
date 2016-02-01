@@ -24,7 +24,7 @@ import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class RandomTrendsSourceTests {
+public class RandomTrendsSourceTest {
     private RandomTrendsSource provider;
 
     @Before

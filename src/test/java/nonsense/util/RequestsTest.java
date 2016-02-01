@@ -18,7 +18,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 
-public class RequestsTests {
+public class RequestsTest {
     private static Request emptyRequest() {
         final Request request = mock(Request.class);
         doReturn(Collections.emptySet())

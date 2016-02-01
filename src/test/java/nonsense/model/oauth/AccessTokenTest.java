@@ -8,7 +8,7 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
-public class AccessTokenTests {
+public class AccessTokenTest {
     @Test
     public void createFake() {
         final AccessToken token = AccessToken.createFake();

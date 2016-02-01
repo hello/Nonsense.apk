@@ -10,7 +10,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
 
-public class NonsenseMatchersTests {
+public class NonsenseMatchersTest {
     @Test
     public void greaterThanNumber() {
         assertThat(10, is(greaterThan(5)));

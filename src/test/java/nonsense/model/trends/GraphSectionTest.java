@@ -15,7 +15,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
 
-public class GraphSectionTests {
+public class GraphSectionTest {
     @Test
     public void newSleepDepth() {
         final GraphSection section = GraphSection.newSleepDepth(Lists.newArrayList(0.3, 0.3, 0.4));

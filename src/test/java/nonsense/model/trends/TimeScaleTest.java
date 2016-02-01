@@ -10,7 +10,7 @@ import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class TimeScaleTests {
+public class TimeScaleTest {
     @Test
     public void fromAccountAge() {
         assertThat(TimeScale.fromAccountAge(2), is(equalTo(Collections.emptyList())));

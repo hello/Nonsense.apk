@@ -26,7 +26,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
 
-public class VersionTranslatorTests {
+public class VersionTranslatorTest {
     private static final int TZ_OFFSET = ZoneOffset.UTC.getTotalSeconds() * 1000;
 
     @Test

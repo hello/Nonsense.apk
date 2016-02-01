@@ -12,7 +12,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.junit.Assert.assertThat;
 
-public class GraphTests {
+public class GraphTest {
     @Test
     public void newSleepScore() {
         final List<Annotation> annotations = Lists.newArrayList();

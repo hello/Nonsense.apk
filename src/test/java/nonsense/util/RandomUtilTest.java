@@ -9,7 +9,7 @@ import static nonsense.NonsenseMatchers.lessThanOrEqual;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class RandomUtilTests {
+public class RandomUtilTest {
     @Test
     public void doubleInRange() {
         final Random random = new Random();
