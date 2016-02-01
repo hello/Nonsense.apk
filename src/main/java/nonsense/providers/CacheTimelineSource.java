@@ -1,6 +1,7 @@
 package nonsense.providers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Lists;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,8 +54,8 @@ public class CacheTimelineSource implements TimelineSource {
     }
 
     @Override
-    public TimelineV1 getTimelineV1ForDate(LocalDate date) {
+    public List<TimelineV1> getTimelinesV1ForDate(LocalDate date) {
         final int position = random.nextInt(timelines.size());
-        return timelines.get(position);
+        return Lists.newArrayList(timelines.get(position));
     }
 }

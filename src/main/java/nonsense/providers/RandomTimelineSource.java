@@ -1,5 +1,7 @@
 package nonsense.providers;
 
+import com.google.common.collect.Lists;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,7 +65,7 @@ public class RandomTimelineSource implements TimelineSource {
     }
 
     @Override
-    public TimelineV1 getTimelineV1ForDate(LocalDate date) {
+    public List<TimelineV1> getTimelinesV1ForDate(LocalDate date) {
         LOGGER.info("Generating timeline (v1) for date {}", date);
 
         final LocalDateTime startTimestamp = generateStartTimestamp(date);
@@ -99,12 +101,13 @@ public class RandomTimelineSource implements TimelineSource {
 
         final int score = RandomUtil.integerInRange(random, 0, 100);
 
-        return new TimelineV1(date,
-                              insights,
-                              generateTimelineMessage(statistics),
-                              score,
-                              segments,
-                              Optional.of(statistics));
+        final TimelineV1 timeline = new TimelineV1(date,
+                                                   insights,
+                                                   generateTimelineMessage(statistics),
+                                                   score,
+                                                   segments,
+                                                   Optional.of(statistics));
+        return Lists.newArrayList(timeline);
     }
 
     public int generateDurationSeconds() {

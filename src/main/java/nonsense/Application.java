@@ -81,7 +81,7 @@ public class Application {
             LOGGER.info("GET /v1/timeline/{}", timelineDate);
 
             response.type(Types.JSON);
-            return timelineFactory.create(request).getTimelineV1ForDate(timelineDate);
+            return timelineFactory.create(request).getTimelinesV1ForDate(timelineDate);
         }, transformer);
 
         get("/v2/timeline/:date", (request, response) -> {
