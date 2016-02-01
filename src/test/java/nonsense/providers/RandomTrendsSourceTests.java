@@ -24,7 +24,7 @@ import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class RandomTrendsProviderTests {
+public class RandomTrendsSourceTests {
     private RandomTrendsSource provider;
 
     @Before
@@ -76,6 +76,10 @@ public class RandomTrendsProviderTests {
         assertThat(graph.maxValue, is(equalTo(1.0)));
         assertThat(graph.dataType, is(equalTo(DataType.PERCENTS)));
         assertThat(graph.graphType, is(equalTo(GraphType.BUBBLES)));
+
+        final List<Double> values = graph.sections.get(0).values;
+        final double sumOfValues = values.stream().collect(Collectors.summingDouble(v -> v));
+        assertThat(sumOfValues, is(equalTo(1.0)));
     }
 
     @Test

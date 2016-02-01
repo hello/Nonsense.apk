@@ -177,7 +177,14 @@ public class RandomTrendsSource implements TrendsSource {
     }
 
     public Graph generateSleepDepthGraph(TimeScale timeScale) {
-        final List<Double> values = generateValues(DataType.PERCENTS, 3);
+        final double min = DataType.PERCENTS.generatedMin;
+        final double max = DataType.PERCENTS.generatedMax;
+
+        final double medium = RandomUtil.doubleInRange(random, min, max);
+        final double deep = RandomUtil.doubleInRange(random, min, max - medium);
+        final double light = max - medium - deep;
+
+        final List<Double> values = Lists.newArrayList(light, medium, deep);
         final List<GraphSection> sections = Lists.newArrayList(GraphSection.newSleepDepth(values));
         return Graph.newSleepDepth(timeScale, sections);
     }
