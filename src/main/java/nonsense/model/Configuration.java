@@ -17,11 +17,15 @@ public interface Configuration {
             description = "the port to run the server on")
     int getPort();
 
-    @Option(shortName = "c",
-            longName = "timeline-cache",
+    @Option(longName = "timeline-cache",
             description = "load timelines from cache files",
             defaultToNull = true)
     File getTimelineCache();
+
+    @Option(longName = "trends-cache",
+            description = "load trends from cache files",
+            defaultToNull = true)
+    File getTrendsCache();
 
     @Option(shortName = "h",
             longName = "help",

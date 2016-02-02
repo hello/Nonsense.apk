@@ -13,6 +13,7 @@ import dagger.Provides;
 import nonsense.Application;
 import nonsense.model.Configuration;
 import nonsense.providers.CacheTimelineSource;
+import nonsense.providers.CacheTrendsSource;
 import nonsense.providers.RandomTimelineSource;
 import nonsense.providers.RandomTrendsSource;
 import nonsense.providers.TimelineSource;
@@ -46,8 +47,14 @@ public class NonsenseModule {
         return configuration;
     }
 
-    @Singleton @Provides TrendsSource.Factory provideTrendsSourceFactory() {
-        return RandomTrendsSource.createFactory();
+    @Singleton @Provides TrendsSource.Factory provideTrendsSourceFactory(ObjectMapper objectMapper) {
+        final File trendsCache = configuration.getTrendsCache();
+        if (trendsCache != null) {
+            return CacheTrendsSource.createFactory(objectMapper, trendsCache)
+                                    .orElseGet(RandomTrendsSource::createFactory);
+        } else {
+            return RandomTrendsSource.createFactory();
+        }
     }
 
     @Singleton @Provides TimelineSource.Factory provideTimelineSourceFactory(ObjectMapper objectMapper) {
