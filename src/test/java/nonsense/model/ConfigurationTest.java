@@ -49,7 +49,8 @@ public class ConfigurationTest {
         final String[] expectedLines = {
                 "Usage: nonsense [options]",
                 "	[--port -p value] : the port to run the server on",
-                "	[--timeline-cache -c value] : load timelines from cache files",
+                "	[--timeline-cache value] : load timelines from cache files",
+                "	[--trends-cache value] : load trends from cache files",
                 "	[--help -h] : display this message and exit",
                 "",
         };
