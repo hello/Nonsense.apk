@@ -1,27 +1,37 @@
 package nonsense.model.insights;
 
 public enum Category {
-    GENERIC,
-    SLEEP_HYGIENE,
-    LIGHT,
-    SOUND,
-    TEMPERATURE,
-    HUMIDITY,
-    AIR_QUALITY,
-    SLEEP_DURATION,
-    TIME_TO_SLEEP,
-    SLEEP_TIME,
-    WAKE_TIME,
-    WORKOUT,
-    CAFFEINE,
-    ALCOHOL,
-    DIET,
-    DAYTIME_SLEEPINESS,
-    DAYTIME_ACTIVITIES,
-    SLEEP_SCORE,
-    SLEEP_QUALITY,
-    WAKE_VARIANCE,
-    BED_LIGHT_DURATION,
-    BED_LIGHT_INTENSITY_RATIO,
-    PARTNER_MOTION,
+    GENERIC("Insight"),
+    SLEEP_HYGIENE("Sleep Hygiene"),
+    LIGHT("Light"),
+    SOUND("Sound"),
+    TEMPERATURE("Temperature"),
+    HUMIDITY("Humidity"),
+    AIR_QUALITY("Air Quality"),
+    SLEEP_DURATION("Sleep Duration"),
+    TIME_TO_SLEEP("Time to Sleep"),
+    SLEEP_TIME("Sleep Time"),
+    WAKE_TIME("Wake Time"),
+    WORKOUT("Work Out"),
+    CAFFEINE("Caffeine"),
+    ALCOHOL("Alcohol"),
+    DIET("Diet"),
+    DAYTIME_SLEEPINESS("Daytime Sleepiness"),
+    DAYTIME_ACTIVITIES("Daytime Activities"),
+    SLEEP_SCORE("Sleep Score"),
+    SLEEP_QUALITY("Sleep Quality"),
+    WAKE_VARIANCE("Wake Variance"),
+    BED_LIGHT_DURATION("Bed Light Duration"),
+    BED_LIGHT_INTENSITY_RATIO("Bed Light Intensity"),
+    PARTNER_MOTION("Partner Motion");
+
+    public final String title;
+
+    public String getName() {
+        return toString().replace("_", " ").toLowerCase();
+    }
+
+    Category(String title) {
+        this.title = title;
+    }
 }

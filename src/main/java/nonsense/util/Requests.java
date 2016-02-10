@@ -13,6 +13,7 @@ public class Requests {
     public static final String LOCALE = "ns_locale";
     public static final String TODAY = "ns_today";
     public static final String ACCOUNT_AGE = "ns_account_age";
+    public static final String LIMIT = "ns_limit";
 
     private static <T> T queryParamValue(Request request,
                                          String name,
