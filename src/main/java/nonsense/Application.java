@@ -44,6 +44,7 @@ public class Application {
         standardRoutes();
         accountRoutes();
         trendsRoutes();
+        insightsRoutes();
         timelineRoutes();
 
         LOGGER.info("Routes ready");
@@ -76,6 +77,14 @@ public class Application {
             response.type(Types.JSON);
             return trendsFactory.create(request)
                                  .getTrendsForTimeScale(timeScale);
+        }, transformer);
+    }
+
+    private void insightsRoutes() {
+        get("/:version/insights", (request, response) -> {
+            response.type(Types.JSON);
+            return insightFactory.create(request)
+                                 .getInsights(imageSourceFactory.create(request));
         }, transformer);
     }
 
