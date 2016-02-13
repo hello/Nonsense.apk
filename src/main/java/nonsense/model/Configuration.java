@@ -27,6 +27,11 @@ public interface Configuration {
             defaultToNull = true)
     File getTrendsCache();
 
+    @Option(longName = "image-manifest",
+            description = "specify the json manifest containing image locations",
+            defaultToNull = true)
+    File getImageManifest();
+
     @Option(shortName = "h",
             longName = "help",
             description = "display this message and exit")

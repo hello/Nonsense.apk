@@ -1,0 +1,64 @@
+{
+  "default_insight_image": {
+    "phone_1x": "https://s3.amazonaws.com/hello-data/insights_images/generic.png",
+    "phone_2x": "https://s3.amazonaws.com/hello-data/insights_images/generic@2x.png",
+    "phone_3x": "https://s3.amazonaws.com/hello-data/insights_images/generic@3x.png"
+  },
+  "insight_images": {
+    "GENERIC": {
+      "phone_1x": "https://s3.amazonaws.com/hello-data/insights_images/generic.png",
+      "phone_2x": "https://s3.amazonaws.com/hello-data/insights_images/generic@2x.png",
+      "phone_3x": "https://s3.amazonaws.com/hello-data/insights_images/generic@3x.png"
+    },
+    "SLEEP_HYGIENE": {
+      "phone_1x": "https://s3.amazonaws.com/hello-data/insights_images/sleep_hygiene.png",
+      "phone_2x": "https://s3.amazonaws.com/hello-data/insights_images/sleep_hygiene@2x.png",
+      "phone_3x": "https://s3.amazonaws.com/hello-data/insights_images/sleep_hygiene@3x.png"
+    },
+    "LIGHT": {
+      "phone_1x": "https://s3.amazonaws.com/hello-data/insights_images/light.png",
+      "phone_2x": "https://s3.amazonaws.com/hello-data/insights_images/light@2x.png",
+      "phone_3x": "https://s3.amazonaws.com/hello-data/insights_images/light@3x.png"
+    },
+    "SOUND": {
+      "phone_1x": "https://s3.amazonaws.com/hello-data/insights_images/sound.png",
+      "phone_2x": "https://s3.amazonaws.com/hello-data/insights_images/sound@2x.png",
+      "phone_3x": "https://s3.amazonaws.com/hello-data/insights_images/sound@3x.png"
+    },
+    "TEMPERATURE": {
+      "phone_1x": "https://s3.amazonaws.com/hello-data/insights_images/temperature.png",
+      "phone_2x": "https://s3.amazonaws.com/hello-data/insights_images/temperature@2x.png",
+      "phone_3x": "https://s3.amazonaws.com/hello-data/insights_images/temperature@3x.png"
+    },
+    "HUMIDITY": {
+      "phone_1x": "https://s3.amazonaws.com/hello-data/insights_images/humidity.png",
+      "phone_2x": "https://s3.amazonaws.com/hello-data/insights_images/humidity@2x.png",
+      "phone_3x": "https://s3.amazonaws.com/hello-data/insights_images/humidity@3x.png"
+    },
+    "AIR_QUALITY": {
+      "phone_1x": "https://s3.amazonaws.com/hello-data/insights_images/air_quality.png",
+      "phone_2x": "https://s3.amazonaws.com/hello-data/insights_images/air_quality@2x.png",
+      "phone_3x": "https://s3.amazonaws.com/hello-data/insights_images/air_quality@3x.png"
+    },
+    "SLEEP_DURATION": {
+      "phone_1x": "https://s3.amazonaws.com/hello-data/insights_images/sleep_duration.png",
+      "phone_2x": "https://s3.amazonaws.com/hello-data/insights_images/sleep_duration@2x.png",
+      "phone_3x": "https://s3.amazonaws.com/hello-data/insights_images/sleep_duration@3x.png"
+    },
+    "SLEEP_QUALITY": {
+      "phone_1x": "https://s3.amazonaws.com/hello-data/insights_images/sleep_quality.png",
+      "phone_2x": "https://s3.amazonaws.com/hello-data/insights_images/sleep_quality@2x.png",
+      "phone_3x": "https://s3.amazonaws.com/hello-data/insights_images/sleep_quality@3x.png"
+    },
+    "WAKE_VARIANCE": {
+      "phone_1x": "https://s3.amazonaws.com/hello-data/insights_images/wake_variance.png",
+      "phone_2x": "https://s3.amazonaws.com/hello-data/insights_images/wake_variance@2x.png",
+      "phone_3x": "https://s3.amazonaws.com/hello-data/insights_images/wake_variance@3x.png"
+    },
+    "PARTNER_MOTION": {
+      "phone_1x": "https://s3.amazonaws.com/hello-data/insights_images/partner_motion.png",
+      "phone_2x": "https://s3.amazonaws.com/hello-data/insights_images/partner_motion@2x.png",
+      "phone_3x": "https://s3.amazonaws.com/hello-data/insights_images/partner_motion@3x.png"
+    }
+  }
+}

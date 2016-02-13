@@ -13,6 +13,8 @@ import nonsense.model.Types;
 import nonsense.model.account.Account;
 import nonsense.model.oauth.AccessToken;
 import nonsense.model.trends.TimeScale;
+import nonsense.providers.ImageSource;
+import nonsense.providers.InsightSource;
 import nonsense.providers.TimelineSource;
 import nonsense.providers.TrendsSource;
 import spark.ResponseTransformer;
@@ -28,6 +30,8 @@ public class Application {
     @Inject Configuration configuration;
     @Inject TrendsSource.Factory trendsFactory;
     @Inject TimelineSource.Factory timelineFactory;
+    @Inject InsightSource.Factory insightFactory;
+    @Inject ImageSource.Factory imageSourceFactory;
 
     public void init() {
         LOGGER.info("Initializing on port {}", configuration.getPort());
