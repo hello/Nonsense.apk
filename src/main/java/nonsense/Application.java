@@ -18,6 +18,7 @@ import nonsense.providers.InsightSource;
 import nonsense.providers.TimelineSource;
 import nonsense.providers.TrendsSource;
 import spark.ResponseTransformer;
+import spark.Route;
 
 import static spark.Spark.get;
 import static spark.Spark.port;
@@ -82,11 +83,13 @@ public class Application {
     }
 
     private void insightsRoutes() {
-        get("/:version/insights", (request, response) -> {
+        final Route insightsRoute = (request, response) -> {
             response.type(Types.JSON);
             return insightFactory.create(request)
                                  .getInsights(imageProvider);
-        }, transformer);
+        };
+        get("/v1/insights", insightsRoute, transformer);
+        get("/v2/insights", insightsRoute, transformer);
     }
 
     private void timelineRoutes() {
