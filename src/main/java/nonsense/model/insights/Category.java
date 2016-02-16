@@ -27,10 +27,6 @@ public enum Category {
 
     public final String title;
 
-    public String getName() {
-        return toString().replace("_", " ").toLowerCase();
-    }
-
     Category(String title) {
         this.title = title;
     }

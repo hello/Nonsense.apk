@@ -51,6 +51,6 @@ public class Insight {
 
     @JsonProperty("category_name")
     public String getCategoryName() {
-        return category.getName();
+        return category.title;
     }
 }
