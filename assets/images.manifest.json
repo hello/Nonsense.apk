@@ -1,9 +1,4 @@
 {
-  "default_insight_image": {
-    "phone_1x": "https://s3.amazonaws.com/hello-data/insights_images/generic.png",
-    "phone_2x": "https://s3.amazonaws.com/hello-data/insights_images/generic@2x.png",
-    "phone_3x": "https://s3.amazonaws.com/hello-data/insights_images/generic@3x.png"
-  },
   "insight_images": {
     "GENERIC": {
       "phone_1x": "https://s3.amazonaws.com/hello-data/insights_images/generic.png",
