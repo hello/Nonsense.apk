@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.OptionalLong;
 
 import nonsense.model.Formats;
+import nonsense.model.images.MultiDensityImage;
 
 public class Insight {
     @JsonProperty("account_id")

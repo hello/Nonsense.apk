@@ -13,7 +13,7 @@ import nonsense.model.Types;
 import nonsense.model.account.Account;
 import nonsense.model.oauth.AccessToken;
 import nonsense.model.trends.TimeScale;
-import nonsense.providers.ImageSource;
+import nonsense.providers.ImageProvider;
 import nonsense.providers.InsightSource;
 import nonsense.providers.TimelineSource;
 import nonsense.providers.TrendsSource;
@@ -28,10 +28,11 @@ public class Application {
 
     @Inject ResponseTransformer transformer;
     @Inject Configuration configuration;
+    @Inject ImageProvider imageProvider;
+
     @Inject TrendsSource.Factory trendsFactory;
     @Inject TimelineSource.Factory timelineFactory;
     @Inject InsightSource.Factory insightFactory;
-    @Inject ImageSource.Factory imageSourceFactory;
 
     public void init() {
         LOGGER.info("Initializing on port {}", configuration.getPort());
@@ -84,7 +85,7 @@ public class Application {
         get("/:version/insights", (request, response) -> {
             response.type(Types.JSON);
             return insightFactory.create(request)
-                                 .getInsights(imageSourceFactory.create(request));
+                                 .getInsights(imageProvider);
         }, transformer);
     }
 
@@ -94,7 +95,8 @@ public class Application {
             LOGGER.info("GET /v1/timeline/{}", timelineDate);
 
             response.type(Types.JSON);
-            return timelineFactory.create(request).getTimelinesV1ForDate(timelineDate);
+            return timelineFactory.create(request)
+                                  .getTimelinesV1ForDate(timelineDate);
         }, transformer);
 
         get("/v2/timeline/:date", (request, response) -> {
@@ -102,7 +104,8 @@ public class Application {
             LOGGER.info("GET /v2/timeline/{}", timelineDate);
 
             response.type(Types.JSON);
-            return timelineFactory.create(request).getTimelineV2ForDate(timelineDate);
+            return timelineFactory.create(request)
+                                  .getTimelineV2ForDate(timelineDate);
         }, transformer);
     }
 }

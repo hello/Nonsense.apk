@@ -30,13 +30,13 @@ public class RandomInsightSource implements InsightSource {
     }
 
     @Override
-    public List<Insight> getInsights(ImageSource imageSource) {
-        return Stream.generate(() -> generateInsight(imageSource))
+    public List<Insight> getInsights(ImageProvider imageProvider) {
+        return Stream.generate(() -> generateInsight(imageProvider))
                      .limit(numberOfInsights)
                      .collect(Collectors.toList());
     }
 
-    public Insight generateInsight(ImageSource imageSource) {
+    public Insight generateInsight(ImageProvider imageProvider) {
         final Category category = Enums.random(Category.values());
         return new Insight(OptionalLong.empty(),
                            category.title,
@@ -44,7 +44,7 @@ public class RandomInsightSource implements InsightSource {
                            category,
                            ZonedDateTime.now(),
                            Optional.of(category.title),
-                           imageSource.getImageForCategory(category));
+                           imageProvider.getImageForInsightCategory(category));
     }
 
     public String generateMessage() {

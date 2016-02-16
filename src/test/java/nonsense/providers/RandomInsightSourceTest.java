@@ -16,7 +16,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 public class RandomInsightSourceTest {
-    private final ImageSource imageSource = category -> Optional.empty();
+    private final ImageProvider imageProvider = category -> Optional.empty();
     private RandomInsightSource insightSource;
 
     @Before
@@ -26,14 +26,14 @@ public class RandomInsightSourceTest {
 
     @Test
     public void getInsights() {
-        final List<Insight> insights = insightSource.getInsights(imageSource);
+        final List<Insight> insights = insightSource.getInsights(imageProvider);
         assertThat(insights.size(), is(equalTo(5)));
         assertThat(insights.contains(null), is(false));
     }
 
     @Test
     public void generateInsight() {
-        final Insight insight = insightSource.generateInsight(imageSource);
+        final Insight insight = insightSource.generateInsight(imageProvider);
         assertThat(insight, is(notNullValue()));
         assertThat(insight.accountId, is(OptionalLong.empty()));
         assertThat(insight.category, is(notNullValue()));

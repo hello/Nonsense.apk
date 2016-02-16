@@ -3,23 +3,24 @@ package nonsense.model.images;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Map;
+import java.util.Optional;
 
 import nonsense.model.insights.Category;
-import nonsense.model.insights.MultiDensityImage;
 
 public class ImageManifest {
     @JsonProperty("insight_images")
     private Map<Category, MultiDensityImage> images;
 
-    @JsonProperty("default_insight_image")
-    private MultiDensityImage defaultImage;
+    public ImageManifest(@JsonProperty("insight_images") Map<Category, MultiDensityImage> images) {
+        this.images = images;
+    }
 
-    public MultiDensityImage getImageForCategory(Category category) {
+    public Optional<MultiDensityImage> getImageForCategory(Category category) {
         final MultiDensityImage existing = images.get(category);
         if (existing != null) {
-            return existing;
+            return Optional.of(existing);
         } else {
-            return defaultImage;
+            return Optional.ofNullable(images.get(Category.GENERIC));
         }
     }
 
@@ -27,7 +28,6 @@ public class ImageManifest {
     public String toString() {
         return "ImageManifest{" +
                 "images=" + images +
-                ", defaultImage=" + defaultImage +
                 '}';
     }
 }

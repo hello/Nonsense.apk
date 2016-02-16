@@ -14,10 +14,10 @@ import nonsense.Application;
 import nonsense.model.Configuration;
 import nonsense.providers.CacheTimelineSource;
 import nonsense.providers.CacheTrendsSource;
-import nonsense.providers.EmptyImageSource;
-import nonsense.providers.ImageSource;
+import nonsense.providers.EmptyImageProvider;
+import nonsense.providers.ImageProvider;
 import nonsense.providers.InsightSource;
-import nonsense.providers.ManifestImageSource;
+import nonsense.providers.ManifestImageProvider;
 import nonsense.providers.RandomInsightSource;
 import nonsense.providers.RandomTimelineSource;
 import nonsense.providers.RandomTrendsSource;
@@ -76,13 +76,13 @@ public class NonsenseModule {
         return RandomInsightSource.createFactory();
     }
 
-    @Singleton @Provides ImageSource.Factory provideImageSourceFactory(ObjectMapper objectMapper) {
+    @Singleton @Provides ImageProvider provideImageProvider(ObjectMapper objectMapper) {
         final File imageManifest = configuration.getImageManifest();
         if (imageManifest != null) {
-            return ManifestImageSource.createFactory(objectMapper, imageManifest)
-                                      .orElseGet(EmptyImageSource::createFactory);
+            return ManifestImageProvider.create(objectMapper, imageManifest)
+                                        .orElseGet(EmptyImageProvider::new);
         } else {
-            return EmptyImageSource.createFactory();
+            return new EmptyImageProvider();
         }
     }
 }
