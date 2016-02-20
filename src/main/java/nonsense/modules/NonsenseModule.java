@@ -56,9 +56,9 @@ public class NonsenseModule {
         final File trendsCache = configuration.getTrendsCache();
         if (trendsCache != null) {
             return CacheTrendsSource.createFactory(objectMapper, trendsCache)
-                                    .orElseGet(RandomTrendsSource::createFactory);
+                                    .orElseGet(() -> RandomTrendsSource.createFactory(configuration));
         } else {
-            return RandomTrendsSource.createFactory();
+            return RandomTrendsSource.createFactory(configuration);
         }
     }
 

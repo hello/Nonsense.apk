@@ -8,6 +8,9 @@ import com.lexicalscope.jewel.cli.Option;
 
 import java.io.File;
 import java.io.PrintStream;
+import java.time.LocalDate;
+
+import spark.utils.StringUtils;
 
 @CommandLineInterface(application = "nonsense")
 public interface Configuration {
@@ -16,6 +19,17 @@ public interface Configuration {
             defaultValue = "3000",
             description = "the port to run the server on")
     int getPort();
+
+    @Option(longName = "account-age",
+            defaultValue = "90",
+            description = "the age of the fake account")
+    int getAccountAge();
+
+    @Option(longName = "today",
+            defaultToNull = true,
+            description = "the date to use for today",
+            pattern = "^(\\d\\d\\d\\d)-(\\d\\d)-(\\d\\d)$")
+    String getTodayRaw();
 
     @Option(longName = "timeline-cache",
             description = "load timelines from cache files",
@@ -45,5 +59,20 @@ public interface Configuration {
         final Cli<Configuration> cli = CliFactory.createCli(Configuration.class);
         final String helpMessage = cli.getHelpMessage();
         stream.println(helpMessage);
+    }
+
+    /**
+     * Extracts the today date from a {@link Configuration} object.
+     * @param configuration The configuration to extract today from.
+     * @implNote This can't be a default method, JewelCli does not forward to default method implementations.
+     * @return  Today, or a reasonable facsimile.
+     */
+    static LocalDate getToday(Configuration configuration) {
+        final String todayRaw = configuration.getTodayRaw();
+        if (StringUtils.isEmpty(todayRaw)) {
+            return LocalDate.now().minusDays(1);
+        } else {
+            return LocalDate.parse(todayRaw);
+        }
     }
 }
