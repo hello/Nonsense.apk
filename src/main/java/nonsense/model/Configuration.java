@@ -65,7 +65,7 @@ public interface Configuration {
     static LocalDate getToday(Configuration configuration) {
         final String todayRaw = configuration.getTodayRaw();
         if (StringUtils.isEmpty(todayRaw)) {
-            return LocalDate.now().minusDays(1);
+            return LocalDate.now();
         } else {
             return LocalDate.parse(todayRaw);
         }
