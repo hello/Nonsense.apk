@@ -22,7 +22,7 @@ public class ConfigurationTest {
         assertThat(configuration.getTimelineCache(), is(nullValue()));
         assertThat(configuration.wantsHelp(), is(false));
         assertThat(configuration.getAccountAge(), is(90));
-        assertThat(Configuration.getToday(configuration), is(equalTo(LocalDate.now().minusDays(1))));
+        assertThat(Configuration.getToday(configuration), is(equalTo(LocalDate.now())));
     }
 
     @Test
