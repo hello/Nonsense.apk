@@ -21,6 +21,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 import nonsense.model.Condition;
+import nonsense.model.Configuration;
 import nonsense.model.trends.Annotation;
 import nonsense.model.trends.DataType;
 import nonsense.model.trends.Graph;
@@ -44,11 +45,12 @@ public class RandomTrendsSource implements TrendsSource {
     private final int accountAgeDays;
     private final Random random = new Random();
 
-    public static Factory createFactory() {
+    public static Factory createFactory(Configuration configuration) {
         return request -> {
-            return new RandomTrendsSource(Requests.queryParamLocalDate(request, Requests.TODAY, () -> LocalDate.now().minusDays(1)),
-                                          Requests.queryParamLocale(request, Requests.LOCALE),
-                                          Requests.queryParamInteger(request, Requests.ACCOUNT_AGE, 90));
+            final LocalDate today = Requests.queryParamLocalDate(request, Requests.TODAY, () -> Configuration.getToday(configuration));
+            final Locale locale = Requests.queryParamLocale(request, Requests.LOCALE);
+            final int accountAge = Requests.queryParamInteger(request, Requests.ACCOUNT_AGE, configuration.getAccountAge());
+            return new RandomTrendsSource(today, locale, accountAge);
         };
     }
 
