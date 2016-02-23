@@ -3,10 +3,10 @@ package nonsense.model.account;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.util.TimeZone;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeUtils;
+import org.joda.time.DateTimeZone;
+import org.joda.time.LocalDate;
 
 import nonsense.model.Formats;
 import nonsense.util.Enums;
@@ -41,11 +41,11 @@ public class Account {
 
     @JsonProperty("created")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Formats.DATE_TIME)
-    public final ZonedDateTime created;
+    public final DateTime created;
 
     @JsonProperty("last_modified")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Formats.DATE_TIME)
-    public final ZonedDateTime lastModified;
+    public final DateTime lastModified;
 
 
     public Account(@JsonProperty("id") String id,
@@ -56,8 +56,8 @@ public class Account {
                    @JsonProperty("height") Integer height,
                    @JsonProperty("weight") Integer weight,
                    @JsonProperty("dob")LocalDate birthDate,
-                   @JsonProperty("created") ZonedDateTime created,
-                   @JsonProperty("last_modified") ZonedDateTime lastModified) {
+                   @JsonProperty("created") DateTime created,
+                   @JsonProperty("last_modified") DateTime lastModified) {
         this.id = id;
         this.email = email;
         this.timeZoneOffset = timeZoneOffset;
@@ -74,14 +74,14 @@ public class Account {
     public static Account createFake() {
         return new Account(FAKE_ID,
                            "fake@sayhello.com",
-                           TimeZone.getDefault().getOffset(System.currentTimeMillis()),
+                           DateTimeZone.getDefault().getOffset(DateTimeUtils.currentTimeMillis()),
                            "Sam Samson",
                            Enums.random(Gender.values()),
                            177,
                            68039,
-                           LocalDate.of(1990, 4, 1),
-                           ZonedDateTime.of(2015, 2, 14, 0, 30, 0, 0, ZoneId.of("UTC")), // First day of real data
-                           ZonedDateTime.now());
+                           new LocalDate(1990, 4, 1),
+                           new DateTime(2015, 2, 14, 0, 30, 0, 0, DateTimeZone.UTC), // First day of real data
+                           DateTime.now());
     }
 
 

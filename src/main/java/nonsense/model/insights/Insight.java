@@ -3,7 +3,8 @@ package nonsense.model.insights;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.time.ZonedDateTime;
+import org.joda.time.DateTime;
+
 import java.util.Optional;
 import java.util.OptionalLong;
 
@@ -25,7 +26,7 @@ public class Insight {
 
     @JsonProperty("timestamp")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Formats.DATE_TIME)
-    public final ZonedDateTime timestamp;
+    public final DateTime timestamp;
 
     @JsonProperty("info_preview")
     public final Optional<String> infoPreview;
@@ -37,7 +38,7 @@ public class Insight {
                    @JsonProperty("title") String title,
                    @JsonProperty("message") String message,
                    @JsonProperty("category") Category category,
-                   @JsonProperty("timestamp") ZonedDateTime timestamp,
+                   @JsonProperty("timestamp") DateTime timestamp,
                    @JsonProperty("info_preview") Optional<String> infoPreview,
                    @JsonProperty("image") Optional<MultiDensityImage> image) {
         this.accountId = accountId;

@@ -2,7 +2,7 @@ package nonsense.modules;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.datatype.joda.JodaModule;
 
 import java.io.File;
 
@@ -40,7 +40,7 @@ public class NonsenseModule {
     @Singleton @Provides ObjectMapper provideObjectMapper() {
         final ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new Jdk8Module());
-        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.registerModule(new JodaModule());
         return objectMapper;
     }
 

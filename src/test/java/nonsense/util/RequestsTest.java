@@ -2,10 +2,10 @@ package nonsense.util;
 
 import com.google.common.collect.Sets;
 
+import org.joda.time.DateTimeZone;
+import org.joda.time.LocalDate;
 import org.junit.Test;
 
-import java.time.LocalDate;
-import java.time.ZoneOffset;
 import java.util.Collections;
 import java.util.Locale;
 
@@ -69,7 +69,7 @@ public class RequestsTest {
 
         final Request withLocale = requestWithQueryParam(Requests.LOCALE, "2015-12-21");
         assertThat(Requests.queryParamLocalDate(withLocale, Requests.LOCALE, () -> now),
-                   is(equalTo(LocalDate.of(2015, 12, 21))));
+                   is(equalTo(new LocalDate(2015, 12, 21))));
 
         final Request withoutLocale = emptyRequest();
         assertThat(Requests.queryParamLocalDate(withoutLocale, Requests.LOCALE, () -> now),
@@ -78,12 +78,12 @@ public class RequestsTest {
 
     @Test
     public void queryParamTimeZone() {
-        final Request withTimeZone = requestWithQueryParam(Requests.TIME_ZONE, "-8");
+        final Request withTimeZone = requestWithQueryParam(Requests.TIME_ZONE, "Europe/London");
         assertThat(Requests.queryParamTimeZone(withTimeZone, Requests.TIME_ZONE),
-                   is(equalTo(ZoneOffset.of("-8"))));
+                   is(equalTo(DateTimeZone.forID("Europe/London"))));
 
         final Request withoutTimeZone = emptyRequest();
         assertThat(Requests.queryParamTimeZone(withoutTimeZone, Requests.TIME_ZONE),
-                   is(equalTo(ZoneOffset.UTC)));
+                   is(equalTo(DateTimeZone.UTC)));
     }
 }

@@ -2,10 +2,10 @@ package nonsense.providers;
 
 import com.google.common.collect.Lists;
 
+import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -29,7 +29,7 @@ public class RandomTrendsSourceTest {
 
     @Before
     public void setUp() {
-        this.provider = new RandomTrendsSource(LocalDate.of(2016, 1, 25),
+        this.provider = new RandomTrendsSource(new LocalDate(2016, 1, 25),
                                                Locale.US,
                                                90);
     }

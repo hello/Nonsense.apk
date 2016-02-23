@@ -1,7 +1,8 @@
 package nonsense.util;
 
-import java.time.LocalDate;
-import java.time.ZoneOffset;
+import org.joda.time.DateTimeZone;
+import org.joda.time.LocalDate;
+
 import java.util.Locale;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -49,9 +50,9 @@ public class Requests {
         return queryParamLocalDate(request, name, LocalDate::now);
     }
 
-    public static ZoneOffset queryParamTimeZone(Request request, String name) {
+    public static DateTimeZone queryParamTimeZone(Request request, String name) {
         return queryParamValue(request, name,
-                               ZoneOffset::of,
-                               () -> ZoneOffset.UTC);
+                               DateTimeZone::forID,
+                               () -> DateTimeZone.UTC);
     }
 }

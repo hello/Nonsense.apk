@@ -2,9 +2,9 @@ package nonsense.model.timeline;
 
 import com.google.common.collect.Lists;
 
+import org.joda.time.DateTime;
 import org.junit.Test;
 
-import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -66,17 +66,17 @@ public class VersionTranslatorTest {
 
     @Test
     public void translateSegmentsToMetrics() {
-        final LocalDateTime now = LocalDateTime.now();
+        final DateTime now = DateTime.now();
         final TimelineV1Segment fellAsleep = new TimelineV1Segment(100, TimelineV1Segment.Type.SLEEP,
                                                                    0, Optional.empty(),
                                                                    TZ_OFFSET, 50,
-                                                                   now.minusHours(10L).toEpochSecond(ZoneOffset.UTC) * 1000L,
+                                                                   now.minusHours(10),
                                                                    Collections.emptyList(),
                                                                    Optional.empty());
         final TimelineV1Segment wokeUp = new TimelineV1Segment(100, TimelineV1Segment.Type.WAKE_UP,
                                                                0, Optional.empty(),
                                                                TZ_OFFSET, 50,
-                                                               now.minusHours(10L).toEpochSecond(ZoneOffset.UTC) * 1000L,
+                                                               now.minusHours(10),
                                                                Collections.emptyList(),
                                                                Optional.empty());
 
@@ -124,7 +124,7 @@ public class VersionTranslatorTest {
 
     @Test
     public void translateSegmentToEvent() {
-        final long timestamp = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) * 1000L;
+        final DateTime timestamp = DateTime.now();
         final TimelineV1Segment awakeInBed = new TimelineV1Segment(100, TimelineV1Segment.Type.NONE,
                                                                    0, Optional.empty(),
                                                                    TZ_OFFSET, 50,

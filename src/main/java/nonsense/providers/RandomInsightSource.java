@@ -2,7 +2,8 @@ package nonsense.providers;
 
 import net._01001111.text.LoremIpsum;
 
-import java.time.ZonedDateTime;
+import org.joda.time.DateTime;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.OptionalLong;
@@ -42,7 +43,7 @@ public class RandomInsightSource implements InsightSource {
                            category.title,
                            generateMessage(),
                            category,
-                           ZonedDateTime.now(),
+                           DateTime.now(),
                            Optional.of(category.title),
                            imageProvider.getImageForInsightCategory(category));
     }

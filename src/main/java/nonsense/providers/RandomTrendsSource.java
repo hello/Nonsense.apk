@@ -3,12 +3,11 @@ package nonsense.providers;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 
+import org.joda.time.LocalDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.Month;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -89,15 +88,15 @@ public class RandomTrendsSource implements TrendsSource {
             sections = generateSleepScoreGraphSections(1);
             graphType = GraphType.GRID;
         } else if (timeScale == TimeScale.LAST_MONTH) {
-            final int weekCount = (today.getMonth().length(today.isLeapYear()) / DAYS_IN_WEEK) + 1;
+            final int weekCount = (today.dayOfMonth().getMaximumValue() / DAYS_IN_WEEK) + 1;
             sections = generateSleepScoreGraphSections(weekCount);
             graphType = GraphType.GRID;
         } else if (timeScale == TimeScale.LAST_3_MONTHS) {
             sections = new ArrayList<>();
             for (int i = 0; i < 3; i++) {
                 final LocalDate current = today.minusMonths(i);
-                final int valueCount = current.getMonth().length(current.isLeapYear());
-                final String monthName = current.getMonth().getDisplayName(TextStyle.SHORT, locale);
+                final int valueCount = current.dayOfMonth().getMaximumValue();
+                final String monthName = current.dayOfMonth().getAsShortText(locale);
                 final List<Double> values = generateValues(DataType.SCORES, valueCount);
                 sections.add(new GraphSection(values,
                                               Lists.newArrayList(monthName),
@@ -119,16 +118,16 @@ public class RandomTrendsSource implements TrendsSource {
         final List<GraphSection> sections = new ArrayList<>();
         if (timeScale == TimeScale.LAST_WEEK) {
             final List<String> titles = daysOfWeek();
-            final OptionalInt highlightedTitle = OptionalInt.of(DayOfWeek.from(today).getValue());
+            final OptionalInt highlightedTitle = OptionalInt.of(today.getDayOfWeek());
             sections.add(generateSleepDurationGraphSection(DAYS_IN_WEEK, titles, highlightedTitle));
         } else if (timeScale == TimeScale.LAST_MONTH) {
             if (today.getDayOfMonth() > 1) {
-                final Month thisMonth = today.getMonth();
-                final String thisMonthName = thisMonth.getDisplayName(TextStyle.SHORT, locale);
-                final int daysInThisMonth = thisMonth.length(today.isLeapYear());
+                final LocalDate.Property thisMonth = today.dayOfMonth();
+                final String thisMonthName = thisMonth.getAsShortText(locale);
+                final int daysInThisMonth = thisMonth.getMaximumValue();
 
-                final Month lastMonth = today.getMonth().minus(1);
-                final String lastMonthName = lastMonth.getDisplayName(TextStyle.SHORT, locale);
+                final LocalDate.Property lastMonth = today.minusMonths(1).dayOfMonth();
+                final String lastMonthName = lastMonth.getAsShortText(locale);
                 final int daysInLastMonth = daysInThisMonth - today.getDayOfMonth();
 
                 sections.add(generateSleepDurationGraphSection(daysInLastMonth,
@@ -138,9 +137,9 @@ public class RandomTrendsSource implements TrendsSource {
                                                                Lists.newArrayList(thisMonthName),
                                                                OptionalInt.of(0)));
             } else {
-                final Month month = today.getMonth();
-                final String monthName = month.getDisplayName(TextStyle.SHORT, locale);
-                final int daysInMonth = month.length(today.isLeapYear());
+                final LocalDate.Property month = today.dayOfMonth();
+                final String monthName = month.getAsShortText(locale);
+                final int daysInMonth = month.getMaximumValue();
                 sections.add(generateSleepDurationGraphSection(daysInMonth,
                                                                Lists.newArrayList(monthName),
                                                                OptionalInt.of(0)));
@@ -148,8 +147,8 @@ public class RandomTrendsSource implements TrendsSource {
         } else if (timeScale == TimeScale.LAST_3_MONTHS) {
             for (int i = 0; i < 3; i++) {
                 final LocalDate sectionDate = today.minusMonths(i);
-                final Month month = sectionDate.getMonth();
-                final String name = month.getDisplayName(TextStyle.SHORT, locale);
+                final LocalDate.Property month = sectionDate.dayOfMonth();
+                final String name = month.getAsShortText(locale);
 
                 final int daysInMonth;
                 final OptionalInt highlightedTitle;
@@ -157,7 +156,7 @@ public class RandomTrendsSource implements TrendsSource {
                     daysInMonth = today.getDayOfMonth();
                     highlightedTitle = OptionalInt.of(0);
                 } else {
-                    daysInMonth = month.length(sectionDate.isLeapYear());
+                    daysInMonth = month.getMaximumValue();
                     highlightedTitle = OptionalInt.empty();
                 }
 
@@ -229,7 +228,7 @@ public class RandomTrendsSource implements TrendsSource {
             allValues = generateValues(DataType.SCORES, DAYS_IN_WEEK * weekCount);
         }
 
-        final int start = DayOfWeek.from(today).getValue() - 1;
+        final int start = today.getDayOfWeek() - 1;
         final int end = DAYS_IN_WEEK - start;
         if (end < DAYS_IN_WEEK) {
             nullPadList(allValues, start, end);
