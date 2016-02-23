@@ -13,9 +13,12 @@ import nonsense.model.Types;
 import nonsense.model.account.Account;
 import nonsense.model.oauth.AccessToken;
 import nonsense.model.trends.TimeScale;
+import nonsense.providers.ImageProvider;
+import nonsense.providers.InsightSource;
 import nonsense.providers.TimelineSource;
 import nonsense.providers.TrendsSource;
 import spark.ResponseTransformer;
+import spark.Route;
 
 import static spark.Spark.get;
 import static spark.Spark.port;
@@ -26,8 +29,11 @@ public class Application {
 
     @Inject ResponseTransformer transformer;
     @Inject Configuration configuration;
+    @Inject ImageProvider imageProvider;
+
     @Inject TrendsSource.Factory trendsFactory;
     @Inject TimelineSource.Factory timelineFactory;
+    @Inject InsightSource.Factory insightFactory;
 
     public void init() {
         LOGGER.info("Initializing on port {}", configuration.getPort());
@@ -40,6 +46,7 @@ public class Application {
         standardRoutes();
         accountRoutes();
         trendsRoutes();
+        insightsRoutes();
         timelineRoutes();
 
         LOGGER.info("Routes ready");
@@ -75,13 +82,24 @@ public class Application {
         }, transformer);
     }
 
+    private void insightsRoutes() {
+        final Route insightsRoute = (request, response) -> {
+            response.type(Types.JSON);
+            return insightFactory.create(request)
+                                 .getInsights(imageProvider);
+        };
+        get("/v1/insights", insightsRoute, transformer);
+        get("/v2/insights", insightsRoute, transformer);
+    }
+
     private void timelineRoutes() {
         get("/v1/timeline/:date", (request, response) -> {
             final LocalDate timelineDate = LocalDate.parse(request.params(":date"));
             LOGGER.info("GET /v1/timeline/{}", timelineDate);
 
             response.type(Types.JSON);
-            return timelineFactory.create(request).getTimelinesV1ForDate(timelineDate);
+            return timelineFactory.create(request)
+                                  .getTimelinesV1ForDate(timelineDate);
         }, transformer);
 
         get("/v2/timeline/:date", (request, response) -> {
@@ -89,7 +107,8 @@ public class Application {
             LOGGER.info("GET /v2/timeline/{}", timelineDate);
 
             response.type(Types.JSON);
-            return timelineFactory.create(request).getTimelineV2ForDate(timelineDate);
+            return timelineFactory.create(request)
+                                  .getTimelineV2ForDate(timelineDate);
         }, transformer);
     }
 }

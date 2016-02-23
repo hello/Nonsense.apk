@@ -59,6 +59,7 @@ public class ConfigurationTest {
         final String[] expectedLines = {
                 "Usage: nonsense [options]",
                 "\t[--account-age value] : the age of the fake account",
+                "\t[--image-manifest value] : specify the json manifest containing image locations",
                 "\t[--port -p value] : the port to run the server on",
                 "\t[--timeline-cache value] : load timelines from cache files",
                 "\t[--today /^(\\d\\d\\d\\d)-(\\d\\d)-(\\d\\d)$/] : the date to use for today",

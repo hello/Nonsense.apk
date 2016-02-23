@@ -30,6 +30,8 @@ The web server run by nonsense currently responds to the following Sense API cal
   - `:date`: A date of the format `yyyy-MM-dd`
 - `GET /v2/timeline/:date`: returns a single timeline object matching [the spec](https://github.com/hello/suripu-spec/blob/master/v2/trends.apib).
   - `:date`: A date of the format `yyyy-MM-dd`
+- `GET /v1/insights`: returns an array of insights.
+- `GET /v2/insights`: returns an array of insights.
 
 ### Route Query Parameters
 
@@ -43,6 +45,10 @@ parameters of randomized data.
 - `GET /:version/timeline/:date`
     - `ns_time_zone`: the time-zone the timeline should be generated in, uses the format `+/-hh:mm`.
     - `ns_locale`: specifies the locale to use when generating textual data.
+- `GET /v1/insights`
+    - `ns_limit`: the number of insights to include in the payload, defaults to `5`.
+- `GET /v2/insights`
+    - `ns_limit`: the number of insights to include in the payload, defaults to `5`.
 
 ## Using data dumps
 
