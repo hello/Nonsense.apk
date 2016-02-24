@@ -1,7 +1,10 @@
 package nonsense.model.timeline.v2;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.collect.Lists;
+
+import org.joda.time.DateTime;
 
 import java.util.Collections;
 import java.util.List;
@@ -9,7 +12,8 @@ import java.util.Optional;
 
 public class TimelineV2Event {
     @JsonProperty("timestamp")
-    public final long timestamp;
+    @JsonFormat(shape = JsonFormat.Shape.NUMBER)
+    public final DateTime timestamp;
 
     @JsonProperty("timezone_offset")
     public final int timezoneOffset;
@@ -32,7 +36,7 @@ public class TimelineV2Event {
     @JsonProperty("valid_actions")
     public final List<Action> validActions;
 
-    public TimelineV2Event(long timestamp,
+    public TimelineV2Event(DateTime timestamp,
                            int timezoneOffset,
                            long durationMillis,
                            Optional<String> message,

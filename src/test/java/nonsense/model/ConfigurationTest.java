@@ -1,12 +1,12 @@
 package nonsense.model;
 
+import org.joda.time.LocalDate;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.PrintStream;
 import java.nio.charset.Charset;
-import java.time.LocalDate;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -38,7 +38,7 @@ public class ConfigurationTest {
         assertThat(configuration.getTimelineCache(), is(equalTo(new File("./assets/timeline-cache/timeline_1.txt"))));
         assertThat(configuration.wantsHelp(), is(false));
         assertThat(configuration.getAccountAge(), is(30));
-        assertThat(Configuration.getToday(configuration), is(equalTo(LocalDate.of(2016, 1, 1))));
+        assertThat(Configuration.getToday(configuration), is(equalTo(new LocalDate(2016, 1, 1))));
     }
 
     @Test

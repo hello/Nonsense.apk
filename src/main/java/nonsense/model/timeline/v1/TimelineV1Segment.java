@@ -1,7 +1,10 @@
 package nonsense.model.timeline.v1;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import org.joda.time.DateTime;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,7 +31,8 @@ public class TimelineV1Segment {
     public final int sleepDepth;
 
     @JsonProperty("timestamp")
-    public final long timestamp;
+    @JsonFormat(shape = JsonFormat.Shape.NUMBER)
+    public final DateTime timestamp;
 
     @JsonProperty("sensors")
     public final List<String> sensors;
@@ -42,7 +46,7 @@ public class TimelineV1Segment {
                              @JsonProperty("message") Optional<String> message,
                              @JsonProperty("offset_millis") int tzOffsetMillis,
                              @JsonProperty("sleep_depth") int sleepDepth,
-                             @JsonProperty("timestamp") long timestamp,
+                             @JsonProperty("timestamp") DateTime timestamp,
                              @JsonProperty("sensors") List<String> sensors,
                              @JsonProperty("sound") Optional<String> sound) {
         this.duration = duration;

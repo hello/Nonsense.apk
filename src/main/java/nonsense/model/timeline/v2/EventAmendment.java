@@ -3,7 +3,7 @@ package nonsense.model.timeline.v2;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.time.LocalTime;
+import org.joda.time.LocalTime;
 
 import nonsense.model.Formats;
 

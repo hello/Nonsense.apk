@@ -58,7 +58,7 @@ public class VersionTranslator {
 
         final OptionalLong fellAsleep = segments.stream()
                                                 .filter(segment -> segment.eventType == TimelineV1Segment.Type.SLEEP)
-                                                .mapToLong(segment -> segment.timestamp)
+                                                .mapToLong(segment -> segment.timestamp.getMillis())
                                                 .findFirst();
         fellAsleep.ifPresent(timestamp -> {
             metrics.add(new TimelineV2Metric(TimelineV2Metric.Name.FELL_ASLEEP, OptionalLong.of(timestamp),
@@ -67,7 +67,7 @@ public class VersionTranslator {
 
         final OptionalLong wokeUp = segments.stream()
                                             .filter(segment -> segment.eventType == TimelineV1Segment.Type.WAKE_UP)
-                                            .mapToLong(segment -> segment.timestamp)
+                                            .mapToLong(segment -> segment.timestamp.getMillis())
                                             .findFirst();
         wokeUp.ifPresent(timestamp -> {
             metrics.add(new TimelineV2Metric(TimelineV2Metric.Name.WOKE_UP, OptionalLong.of(timestamp),

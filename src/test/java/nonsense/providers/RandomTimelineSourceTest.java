@@ -1,11 +1,11 @@
 package nonsense.providers;
 
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -28,7 +28,7 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
 
 public class RandomTimelineSourceTest {
-    private final ZoneOffset timeZone = ZoneOffset.UTC;
+    private final DateTimeZone timeZone = DateTimeZone.UTC;
     private RandomTimelineSource provider;
 
     @Before
@@ -49,9 +49,9 @@ public class RandomTimelineSourceTest {
 
     @Test
     public void generateStartTimestamp() {
-        final LocalDate now = LocalDate.of(2016, 1, 29);
-        final LocalDateTime min = now.atStartOfDay().plusHours(20);
-        final LocalDateTime max = now.atStartOfDay().plusHours(26);
+        final LocalDate now = new LocalDate(2016, 1, 29);
+        final DateTime min = now.toDateTimeAtStartOfDay().plusHours(20);
+        final DateTime max = now.toDateTimeAtStartOfDay().plusHours(26);
 
         for (int i = 0; i < 100; i++) {
             assertThat(provider.generateStartTimestamp(now),
@@ -130,7 +130,7 @@ public class RandomTimelineSourceTest {
 
     @Test
     public void generateSegment() {
-        final long timestamp = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) * 1000L;
+        final DateTime timestamp = DateTime.now();
         final TimelineV1Segment notSleepingSegment = provider.generateSegment(timestamp, TimelineV1Segment.Type.IN_BED);
         assertThat(notSleepingSegment.duration, is(allOf(greaterThanOrEqual(0L), lessThanOrEqual(60L))));
         assertThat(notSleepingSegment.eventType, is(equalTo(TimelineV1Segment.Type.IN_BED)));

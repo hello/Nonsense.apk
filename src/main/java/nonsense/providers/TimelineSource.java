@@ -1,6 +1,7 @@
 package nonsense.providers;
 
-import java.time.LocalDate;
+import org.joda.time.LocalDate;
+
 import java.util.List;
 
 import nonsense.model.timeline.VersionTranslator;
