@@ -95,12 +95,12 @@ public class RandomTrendsSource implements TrendsSource {
             for (int i = 0; i < 3; i++) {
                 final LocalDate current = today.minusMonths(i);
                 final int valueCount = current.dayOfMonth().getMaximumValue();
-                final String monthName = current.dayOfMonth().getAsShortText(locale);
                 final List<Double> values = generateValues(DataType.SCORES, valueCount, true);
-                sections.add(new GraphSection(values,
-                                              Lists.newArrayList(monthName),
-                                              Collections.emptyList(),
-                                              OptionalInt.empty()));
+                final String monthName = current.toString("MMM", locale);
+                sections.add(0, new GraphSection(values,
+                                                 Lists.newArrayList(monthName),
+                                                 Collections.emptyList(),
+                                                 OptionalInt.empty()));
             }
             graphType = GraphType.OVERVIEW;
         } else {
@@ -122,8 +122,8 @@ public class RandomTrendsSource implements TrendsSource {
         } else if (timeScale == TimeScale.LAST_MONTH) {
             if (today.getDayOfMonth() > 1) {
                 final LocalDate.Property thisMonth = today.dayOfMonth();
-                final String thisMonthName = thisMonth.getAsShortText(locale);
                 final int daysInThisMonth = thisMonth.getMaximumValue();
+                final String thisMonthName = today.toString("MMM", locale);
 
                 final LocalDate.Property lastMonth = today.minusMonths(1).dayOfMonth();
                 final String lastMonthName = lastMonth.getAsShortText(locale);
@@ -137,8 +137,8 @@ public class RandomTrendsSource implements TrendsSource {
                                                                OptionalInt.of(0)));
             } else {
                 final LocalDate.Property month = today.dayOfMonth();
-                final String monthName = month.getAsShortText(locale);
                 final int daysInMonth = month.getMaximumValue();
+                final String monthName = today.toString("MMM", locale);
                 sections.add(generateSleepDurationGraphSection(daysInMonth,
                                                                Lists.newArrayList(monthName),
                                                                OptionalInt.of(0)));
@@ -147,7 +147,7 @@ public class RandomTrendsSource implements TrendsSource {
             for (int i = 0; i < 3; i++) {
                 final LocalDate sectionDate = today.minusMonths(i);
                 final LocalDate.Property month = sectionDate.dayOfMonth();
-                final String name = month.getAsShortText(locale);
+                final String name = sectionDate.toString("MMM", locale);
 
                 final int daysInMonth;
                 final OptionalInt highlightedTitle;
