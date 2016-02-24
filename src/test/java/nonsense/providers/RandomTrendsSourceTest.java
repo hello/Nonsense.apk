@@ -9,6 +9,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.OptionalInt;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -19,6 +20,8 @@ import nonsense.model.trends.GraphSection;
 import nonsense.model.trends.GraphType;
 import nonsense.model.trends.TimeScale;
 
+import static nonsense.NonsenseMatchers.greaterThanOrEqual;
+import static nonsense.NonsenseMatchers.lessThanOrEqual;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
@@ -39,10 +42,14 @@ public class RandomTrendsSourceTest {
         final Graph lastWeek = provider.generateSleepScoreGraph(TimeScale.LAST_WEEK);
         assertThat(lastWeek.graphType, is(equalTo(GraphType.GRID)));
         assertThat(lastWeek.sections.size(), is(equalTo(1)));
+        assertThat(lastWeek.sections.get(0).highlightedTitle, is(equalTo(OptionalInt.of(0))));
+        assertThat(lastWeek.sections.get(0).highlightedValues.isEmpty(), is(false));
 
         final Graph lastMonth = provider.generateSleepScoreGraph(TimeScale.LAST_MONTH);
         assertThat(lastMonth.graphType, is(equalTo(GraphType.GRID)));
-        assertThat(lastMonth.sections.size(), is(equalTo(5)));
+        assertThat(lastMonth.sections.size(), is(equalTo(4)));
+        assertThat(lastMonth.sections.get(0).highlightedTitle, is(equalTo(OptionalInt.of(0))));
+        assertThat(lastMonth.sections.get(3).highlightedValues.isEmpty(), is(false));
 
         final Graph last3Months = provider.generateSleepScoreGraph(TimeScale.LAST_3_MONTHS);
         assertThat(last3Months.graphType, is(equalTo(GraphType.OVERVIEW)));
@@ -122,11 +129,11 @@ public class RandomTrendsSourceTest {
     @Test
     public void generateValues() {
         for (final DataType dataType : DataType.values()) {
-            final List<Double> values = provider.generateValues(dataType, 10);
+            final List<Double> values = provider.generateValues(dataType, 10, false);
             assertThat(values.size(), is(equalTo(10)));
             for (final double value : values) {
-                assertThat(value >= dataType.generatedMin, is(true));
-                assertThat(value <= dataType.generatedMax, is(true));
+                assertThat(value, is(greaterThanOrEqual(dataType.generatedMin)));
+                assertThat(value, is(lessThanOrEqual(dataType.generatedMax)));
             }
         }
     }

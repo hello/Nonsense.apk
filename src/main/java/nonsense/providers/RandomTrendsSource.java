@@ -88,8 +88,7 @@ public class RandomTrendsSource implements TrendsSource {
             sections = generateSleepScoreGraphSections(1);
             graphType = GraphType.GRID;
         } else if (timeScale == TimeScale.LAST_MONTH) {
-            final int weekCount = (today.dayOfMonth().getMaximumValue() / DAYS_IN_WEEK) + 1;
-            sections = generateSleepScoreGraphSections(weekCount);
+            sections = generateSleepScoreGraphSections(4);
             graphType = GraphType.GRID;
         } else if (timeScale == TimeScale.LAST_3_MONTHS) {
             sections = new ArrayList<>();
@@ -97,7 +96,7 @@ public class RandomTrendsSource implements TrendsSource {
                 final LocalDate current = today.minusMonths(i);
                 final int valueCount = current.dayOfMonth().getMaximumValue();
                 final String monthName = current.dayOfMonth().getAsShortText(locale);
-                final List<Double> values = generateValues(DataType.SCORES, valueCount);
+                final List<Double> values = generateValues(DataType.SCORES, valueCount, true);
                 sections.add(new GraphSection(values,
                                               Lists.newArrayList(monthName),
                                               Collections.emptyList(),
@@ -218,19 +217,19 @@ public class RandomTrendsSource implements TrendsSource {
     private List<GraphSection> generateSleepScoreGraphSections(int weekCount) {
         final List<Double> allValues;
         if (weekCount == 1 && accountAgeDays < DAYS_IN_WEEK) {
-            allValues = generateValues(DataType.SCORES, accountAgeDays);
+            allValues = generateValues(DataType.SCORES, accountAgeDays, true);
             final int backFillCount = DAYS_IN_WEEK - accountAgeDays;
             LOGGER.info("Account age less than 1 week, back filling {} value(s)", backFillCount);
             for (int i = 0; i < backFillCount; i++) {
                 allValues.add(0, -1.0);
             }
         } else {
-            allValues = generateValues(DataType.SCORES, DAYS_IN_WEEK * weekCount);
+            allValues = generateValues(DataType.SCORES, DAYS_IN_WEEK * weekCount, true);
         }
 
-        final int start = today.getDayOfWeek() - 1;
+        final int start = today.getDayOfWeek();
         final int end = DAYS_IN_WEEK - start;
-        if (end < DAYS_IN_WEEK) {
+        if (end < DAYS_IN_WEEK - 1) {
             nullPadList(allValues, start, end);
         }
 
@@ -239,17 +238,28 @@ public class RandomTrendsSource implements TrendsSource {
             final GraphSection section = new GraphSection(sectionValues,
                                                           Collections.emptyList(),
                                                           Collections.emptyList(),
-                                                          OptionalInt.of(start));
+                                                          OptionalInt.of(start - 1));
             sections.add(section);
         }
 
         sections.set(0, sections.get(0).withTitles(daysOfWeek()));
 
+        final int lastSectionIndex = sections.size() - 1;
+        final GraphSection lastSection = sections.get(lastSectionIndex);
+        final int firstNullIndex = lastSection.values.indexOf(null);
+        if (firstNullIndex > 0) {
+            final List<Integer> highlightedValues = Lists.newArrayList(firstNullIndex - 1);
+            sections.set(lastSectionIndex, lastSection.withHighlightedValues(highlightedValues));
+        } else {
+            final List<Integer> highlightedValues = Lists.newArrayList(lastSection.values.size() - 1);
+            sections.set(lastSectionIndex, lastSection.withHighlightedValues(highlightedValues));
+        }
+
         return sections;
     }
 
     private GraphSection generateSleepDurationGraphSection(int count, List<String> titles, OptionalInt highlightedTitle) {
-        final List<Double> values = generateValues(DataType.HOURS, count);
+        final List<Double> values = generateValues(DataType.HOURS, count, false);
         final double min = values.stream().min(Double::compare).orElse(0.0);
         final double max = values.stream().max(Double::compare).orElse(0.0);
 
@@ -258,17 +268,21 @@ public class RandomTrendsSource implements TrendsSource {
     }
 
     @VisibleForTesting
-    List<Double> generateValues(DataType dataType, int count) {
+    List<Double> generateValues(DataType dataType, int count, boolean includeMissingValues) {
         LOGGER.info("Generating {} values(s) of {}", count, dataType);
 
         final List<Double> values = new ArrayList<>(count);
         for (int i = 0; i < count; i++) {
-            final double value = RandomUtil.doubleInRange(random, dataType.generatedMin,
-                                                          dataType.generatedMax);
-            if (dataType.roundValues) {
-                values.add(Math.floor(value));
+            if (includeMissingValues && random.nextFloat() > 0.75f) {
+                values.add(-1.0);
             } else {
-                values.add(value);
+                final double value = RandomUtil.doubleInRange(random, dataType.generatedMin,
+                                                              dataType.generatedMax);
+                if (dataType.roundValues) {
+                    values.add(Math.floor(value));
+                } else {
+                    values.add(value);
+                }
             }
         }
         return values;
